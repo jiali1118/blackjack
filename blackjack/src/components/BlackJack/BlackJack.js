@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../CalculateHand/CalculateHand";
+import PlayerAction from "../PlayerAction/PlayerAction";
 const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
@@ -63,7 +64,6 @@ const BlackjackGame = () => {
       console.log(calculateHand(playerHand, setPlayerScore));
     }
   }, [isPlayerTurn, playerHand, dealerHand, setPlayerScore, setDealerScore]);
-
   return (
     <div>
       {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
@@ -74,6 +74,9 @@ const BlackjackGame = () => {
       </div>
       {gameStarted && !roundStarted ? (
         <BetAmount betAmount={handleBetAmount} startRound={handleStartRound} />
+      ) : null}
+      {isPlayerTurn ? (
+        <PlayerAction hand={playerHand} betAmount={setBetAmount} />
       ) : null}
       <div id="playerhand">
         <h2>Player 1</h2>

@@ -1,12 +1,39 @@
 import React from "react";
 
-function playerAction() {
+function playerAction(playerHand, setBetAmount) {
   return (
     <div>
-      <button>Hit</button>
-      <button>Double</button>
-      <button>Stand</button>
-      <button>Split</button>
+      <button
+        onClick={() => {
+          console.log(playerHand.hand[0].value);
+        }}
+      >
+        Hit
+      </button>
+      <button
+        onClick={() => {
+          console.log("CLICKED!");
+        }}
+      >
+        Double
+      </button>
+      <button
+        onClick={() => {
+          console.log("CLICKED!");
+        }}
+      >
+        Stand
+      </button>
+      {playerHand.hand.length >= 2 &&
+      playerHand.hand[0].value === playerHand.hand[1].value ? (
+        <button
+          onClick={() => {
+            console.log("CLICKED!");
+          }}
+        >
+          Split
+        </button>
+      ) : null}
     </div>
   );
 }
