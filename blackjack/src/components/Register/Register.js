@@ -6,6 +6,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleEmailChange = (e) => {
     setInputEmail(e.target.value);
@@ -23,10 +24,15 @@ function Register() {
     setPasswordsMatch(e.target.value === password);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
   return (
     <div>
       <h1> Register </h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>Email</label>
           <input type="text" value={inputEmail} onChange={handleEmailChange} />
@@ -47,10 +53,18 @@ function Register() {
             onChange={handleConfirmPasswordChange}
           />
         </div>
-        {!passwordsMatch && (
+        <div>
+          <p>
+            Already have an account? <a href="/login">Login</a>
+          </p>
+        </div>
+        {submitted && !passwordsMatch && (
           <p style={{ color: "red" }}>Passwords do not match!</p>
         )}
         <button type="submit">Submit</button>
+        <p>email: {inputEmail}</p>
+        <p>password: {password}</p>
+        <p>confirm: {confirmPassword}</p>
       </form>
     </div>
   );
