@@ -43,13 +43,6 @@ const BlackjackGame = () => {
       console.error(err);
     }
   };
-  const handleBetAmount = (amount) => {
-    setBetAmount(amount);
-  };
-  const handleStartRound = () => {
-    setRoundStarted(true);
-    console.log("Round is Starting");
-  };
 
   useEffect(() => {
     if (roundStarted) {
@@ -59,12 +52,11 @@ const BlackjackGame = () => {
   }, [roundStarted, deckId, setPlayerHand, setDealerHand]);
 
   useEffect(() => {
-    // Log hand totals only when playerHand and dealerHand are defined
-    if (isPlayerTurn && dealerHand.length > 1 && playerHand.length > 1) {
-      console.log(calculateHand(dealerHand, setDealerScore));
-      console.log(calculateHand(playerHand, setPlayerScore));
-    }
-  }, [isPlayerTurn, playerHand, dealerHand, setPlayerScore, setDealerScore]);
+    calculateHand(playerHand, setPlayerScore);
+  }, [playerHand]);
+  useEffect(() => {
+    calculateHand(dealerHand, setDealerScore);
+  }, [dealerHand]);
 
   console.log(playerHand);
   return (
@@ -79,14 +71,29 @@ const BlackjackGame = () => {
         </div>
       </div>
       {gameStarted && !roundStarted ? (
-        <BetAmount betAmount={handleBetAmount} startRound={handleStartRound} />
+        <BetAmount setBetAmount={setBetAmount} roundStarted={setRoundStarted} />
       ) : null}
       {isPlayerTurn ? (
-        <PlayerAction deckId={deckId} setPlayerHand={setPlayerHand} />
+        <PlayerAction
+          deckId={deckId}
+          setPlayerHand={setPlayerHand}
+          setBetAmount={setBetAmount}
+        />
       ) : null}
       <div id="playerhand">
         <h2>Player 1</h2>
-        <p>{playerScore !== 0 ? "Score : " + playerScore : null}</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <p style={{ padding: "0 10px" }}>
+            {playerScore !== 0 ? "Score : " + playerScore : null}
+          </p>
+          <p>{roundStarted ? "Bet: $" + betAmount : null}</p>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           {renderPlayerHand(playerHand)}
         </div>

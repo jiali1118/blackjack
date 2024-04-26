@@ -1,11 +1,11 @@
 import React from "react";
 import Hit from "../Hit/Hit";
+import double from "../../utilities/double";
 function playerAction(props) {
   return (
     <div>
       <button
         onClick={() => {
-          console.log(props.deckId);
           Hit(props.deckId, props.setPlayerHand);
         }}
       >
@@ -13,7 +13,7 @@ function playerAction(props) {
       </button>
       <button
         onClick={() => {
-          console.log("CLICKED!");
+          double(props.deckId, props.setPlayerHand, props.setBetAmount);
         }}
       >
         Double
