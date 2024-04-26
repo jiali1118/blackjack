@@ -1,14 +1,19 @@
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import BlackjackGame from "./components/BlackJack/BlackJack";
-import Header from "./components/Header/header";
+import Home from "./components/Home/Home";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <h1>Black Jack</h1>
-      <BlackjackGame />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Home/>} />
+        <Route exact path="/login" element={<Login/>} />
+        <Route exact path="/register" element={<Register/>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
