@@ -1,11 +1,12 @@
 import React from "react";
-
-function playerAction(playerHand, setBetAmount) {
+import Hit from "../Hit/Hit";
+function playerAction(props) {
   return (
     <div>
       <button
         onClick={() => {
-          console.log(playerHand.hand[0].value);
+          console.log(props.deckId);
+          Hit(props.deckId, props.setPlayerHand);
         }}
       >
         Hit
@@ -24,7 +25,7 @@ function playerAction(playerHand, setBetAmount) {
       >
         Stand
       </button>
-      {playerHand.hand.length >= 2 &&
+      {/* {playerHand.hand.length >= 2 &&
       playerHand.hand[0].value === playerHand.hand[1].value ? (
         <button
           onClick={() => {
@@ -33,7 +34,7 @@ function playerAction(playerHand, setBetAmount) {
         >
           Split
         </button>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

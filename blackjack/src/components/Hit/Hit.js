@@ -1,17 +1,15 @@
-import React from "react";
+import fetchCard from "../fetchCard/fetchCard";
 
-const hit = (deckID) => {
+const hit = async (deckID, setPlayerHand) => {
   try {
-    const { data, error } = fetchCard(deckID); // Call fetchCard synchronously
+    const { data, error } = await fetchCard(deckID); // Call fetchCard synchronously
     if (error) {
       console.error("Error fetching card:", error);
       return null;
     }
-
-    // Perform action with the fetched card data
-    console.log("Fetched card data:", data);
-
+    console.log("Fetched card data:", data.cards[0]);
     // Return the fetched card data
+    setPlayerHand((prevPlayerHand) => [...prevPlayerHand, data.cards[0]]);
     return data;
   } catch (error) {
     console.error("Error fetching card:", error);
