@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import Hit from "../Hit/Hit";
 import double from "../../utilities/double";
-function playerAction(props) {
+
+function PlayerAction(props) {
+  const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
       <button
         onClick={() => {
           Hit(props.deckId, props.setPlayerHand);
+          setHitClicked(true);
         }}
       >
         Hit
       </button>
+      {!hitClicked ? (
+        <button
+          onClick={() => {
+            double(props.deckId, props.setPlayerHand, props.setBetAmount);
+            props.setIsPlayerTurn(false);
+            props.setIsDealerTurn(true);
+          }}
+        >
+          Double
+        </button>
+      ) : null}
+
       <button
         onClick={() => {
-          double(props.deckId, props.setPlayerHand, props.setBetAmount);
-        }}
-      >
-        Double
-      </button>
-      <button
-        onClick={() => {
-          console.log("CLICKED!");
+          props.setIsPlayerTurn(false);
+          props.setIsDealerTurn(true);
         }}
       >
         Stand
       </button>
-      {/* {playerHand.hand.length >= 2 &&
-      playerHand.hand[0].value === playerHand.hand[1].value ? (
+      {props.playerHand.length >= 2 &&
+      props.playerHand[0].value === props.playerHand[1].value ? (
         <button
           onClick={() => {
             console.log("CLICKED!");
@@ -34,9 +43,9 @@ function playerAction(props) {
         >
           Split
         </button>
-      ) : null} */}
+      ) : null}
     </div>
   );
 }
 
-export default playerAction;
+export default PlayerAction;

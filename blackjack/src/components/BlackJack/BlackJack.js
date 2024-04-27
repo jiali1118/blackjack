@@ -3,7 +3,7 @@ import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../CalculateHand/CalculateHand";
 import PlayerAction from "../PlayerAction/PlayerAction";
-import renderPlayerHand from "../renderHand/renderHand";
+import RenderHand from "../RenderHand/RenderHand";
 const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
@@ -44,6 +44,7 @@ const BlackjackGame = () => {
     }
   };
 
+  //When round is started, call these functions
   useEffect(() => {
     if (roundStarted) {
       dealHand(deckId, setPlayerHand, setDealerHand);
@@ -58,7 +59,6 @@ const BlackjackGame = () => {
     calculateHand(dealerHand, setDealerScore);
   }, [dealerHand]);
 
-  console.log(playerHand);
   return (
     <div>
       {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
@@ -67,7 +67,7 @@ const BlackjackGame = () => {
         <h2>Dealer</h2>
         <p>{dealerScore !== 0 ? "Score : " + dealerScore : null}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          {renderPlayerHand(dealerHand)}
+          <RenderHand playerHand={dealerHand} />
         </div>
       </div>
       {gameStarted && !roundStarted ? (
@@ -76,8 +76,11 @@ const BlackjackGame = () => {
       {isPlayerTurn ? (
         <PlayerAction
           deckId={deckId}
+          playerHand={playerHand}
           setPlayerHand={setPlayerHand}
           setBetAmount={setBetAmount}
+          setIsPlayerTurn={setIsPlayerTurn}
+          setIsDealerTurn={setIsDealerTurn}
         />
       ) : null}
       <div id="playerhand">
@@ -95,7 +98,7 @@ const BlackjackGame = () => {
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          {renderPlayerHand(playerHand)}
+          <RenderHand playerHand={playerHand} />
         </div>
       </div>
     </div>
