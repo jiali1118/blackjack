@@ -8,7 +8,7 @@ function PlayerAction(props) {
     <div>
       <button
         onClick={() => {
-          Hit(props.deckId, props.setPlayerHand);
+          Hit(props.deckId, props.setPlayerHands);
           setHitClicked(true);
         }}
       >
@@ -17,7 +17,7 @@ function PlayerAction(props) {
       {!hitClicked ? (
         <button
           onClick={() => {
-            double(props.deckId, props.setPlayerHand, props.setBetAmount);
+            double(props.deckId, props.setPlayerHands, props.setBetAmount);
             props.setIsPlayerTurn(false);
             props.setIsDealerTurn(true);
           }}
@@ -34,8 +34,8 @@ function PlayerAction(props) {
       >
         Stand
       </button>
-      {props.playerHand.length >= 2 &&
-      props.playerHand[0].value === props.playerHand[1].value ? (
+      {props.playerHands.length >= 2 &&
+      props.playerHands[0].value === props.playerHands[1].value ? (
         <button
           onClick={() => {
             console.log("CLICKED!");

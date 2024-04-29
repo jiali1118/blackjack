@@ -2,7 +2,7 @@ import React from "react";
 
 // Assuming playerHand is an array containing the fetched card objects
 const RenderHand = (props) => {
-  return props.playerHand.map((card, index) => (
+  return props.playerHands.map((card, index) => (
     <img
       key={index}
       src={card.image}

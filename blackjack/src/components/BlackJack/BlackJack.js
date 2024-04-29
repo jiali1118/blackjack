@@ -8,7 +8,7 @@ const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
   const [endGame, setEndGame] = useState(false);
-  const [playerHand, setPlayerHand] = useState([]);
+  const [playerHands, setPlayerHands] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
   const [outcome, setOutcome] = useState(null);
   const [isPlayerTurn, setIsPlayerTurn] = useState(false);
@@ -47,14 +47,14 @@ const BlackjackGame = () => {
   //When round is started, call these functions
   useEffect(() => {
     if (roundStarted) {
-      dealHand(deckId, setPlayerHand, setDealerHand);
+      dealHand(deckId, setPlayerHands, setDealerHand);
       setIsPlayerTurn(true);
     }
-  }, [roundStarted, deckId, setPlayerHand, setDealerHand]);
+  }, [roundStarted, deckId, setPlayerHands, setDealerHand]);
 
   useEffect(() => {
-    calculateHand(playerHand, setPlayerScore);
-  }, [playerHand]);
+    calculateHand(playerHands, setPlayerScore);
+  }, [playerHands]);
   useEffect(() => {
     calculateHand(dealerHand, setDealerScore);
   }, [dealerHand]);
@@ -67,7 +67,7 @@ const BlackjackGame = () => {
         <h2>Dealer</h2>
         <p>{dealerScore !== 0 ? "Score : " + dealerScore : null}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <RenderHand playerHand={dealerHand} />
+          <RenderHand playerHands={dealerHand} />
         </div>
       </div>
       {gameStarted && !roundStarted ? (
@@ -76,8 +76,8 @@ const BlackjackGame = () => {
       {isPlayerTurn ? (
         <PlayerAction
           deckId={deckId}
-          playerHand={playerHand}
-          setPlayerHand={setPlayerHand}
+          playerHands={playerHands}
+          setPlayerHands={setPlayerHands}
           setBetAmount={setBetAmount}
           setIsPlayerTurn={setIsPlayerTurn}
           setIsDealerTurn={setIsDealerTurn}
@@ -98,7 +98,7 @@ const BlackjackGame = () => {
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <RenderHand playerHand={playerHand} />
+          <RenderHand playerHands={playerHands} />
         </div>
       </div>
     </div>
