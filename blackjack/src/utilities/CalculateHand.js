@@ -1,6 +1,3 @@
-import React from "react";
-import dealHand from "../DealHand/DealHand";
-
 function calculateHand(hand, setScore) {
   let total = 0;
   let hasAce = false;

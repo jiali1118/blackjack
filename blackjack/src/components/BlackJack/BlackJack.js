@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
-import calculateHand from "../CalculateHand/CalculateHand";
+import calculateHand from "../../utilities/CalculateHand";
 import PlayerAction from "../PlayerAction/PlayerAction";
 import RenderHand from "../RenderHand/RenderHand";
+import dealerTurn from "../../utilities/dealerTurn";
+import isSoft17 from "../../utilities/isSoft17";
+import hit from "../../utilities/Hit";
 const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
@@ -59,6 +62,19 @@ const BlackjackGame = () => {
     calculateHand(dealerHand, setDealerScore);
   }, [dealerHand]);
 
+  useEffect(() => {
+    if (isDealerTurn) {
+      dealerTurn(
+        dealerHand,
+        dealerScore,
+        setDealerHand,
+        deckId,
+        setDealerScore,
+        setIsDealerTurn
+      );
+    }
+  }, [isDealerTurn]);
+
   return (
     <div>
       {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
@@ -79,18 +95,14 @@ const BlackjackGame = () => {
           playerHands={playerHands}
           setPlayerHands={setPlayerHands}
           setBetAmount={setBetAmount}
+          setPlayerScore={setPlayerScore}
           setIsPlayerTurn={setIsPlayerTurn}
           setIsDealerTurn={setIsDealerTurn}
         />
       ) : null}
       <div id="playerhand">
         <h2>Player 1</h2>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <p style={{ padding: "0 10px" }}>
             {playerScore !== 0 ? "Score : " + playerScore : null}
           </p>

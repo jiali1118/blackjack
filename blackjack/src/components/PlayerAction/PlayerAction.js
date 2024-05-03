@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Hit from "../Hit/Hit";
+import Hit from "../../utilities/Hit";
 import double from "../../utilities/double";
 
 function PlayerAction(props) {
@@ -8,7 +8,12 @@ function PlayerAction(props) {
     <div>
       <button
         onClick={() => {
-          Hit(props.deckId, props.setPlayerHands);
+          Hit(
+            props.deckId,
+            props.setPlayerHands,
+            props.playerHands,
+            props.setPlayerScore
+          );
           setHitClicked(true);
         }}
       >
