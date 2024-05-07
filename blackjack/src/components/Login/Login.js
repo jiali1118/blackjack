@@ -33,11 +33,8 @@ function Login() {
         throw new Error("Failed to fetch user data");
       }
       const userData = await response.json();
-      // console.log(userData);
       if(userData.token) {
         document.cookie = `access_token=${userData.token}; path=/`;
-        // You may need to adjust the expiration and other options for the cookie
-        console.log("user is logged in", userData);
         navigate("/");
       } else {
         setErrorMessage("Invalid email or password. Please try again");
