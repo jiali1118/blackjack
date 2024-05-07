@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/CalculateHand";
@@ -7,6 +7,16 @@ import RenderHand from "../RenderHand/RenderHand";
 import dealerTurn from "../../utilities/dealerTurn";
 import isSoft17 from "../../utilities/isSoft17";
 import hit from "../../utilities/Hit";
+const initialState = {
+  gameStarted: false,
+  roundStarted: false,
+  roundEnded: false,
+  betStarted: false,
+  deckId: "",
+  playerScore: 0,
+  dealerScore: 0,
+  betAmount: 0,
+};
 const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
@@ -22,21 +32,7 @@ const BlackjackGame = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [dealerScore, setDealerScore] = useState(0);
   //Initialize Deck
-  const newDeck = async () => {
-    try {
-      const response = await fetch(
-        `https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch deck");
-      }
-      const data = await response.json();
-      console.log("Deck Loaded: " + data.deck_id);
-      return data.deck_id;
-    } catch (err) {
-      console.error("Error loading deck:", err);
-    }
-  };
+
   const startGame = async () => {
     try {
       const newDeckID = await newDeck();
