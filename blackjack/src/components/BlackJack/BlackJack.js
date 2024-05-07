@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../CalculateHand/CalculateHand";
+import PlayerAction from "../PlayerAction/PlayerAction";
+import renderPlayerHand from "../renderHand/renderHand";
 const BlackjackGame = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
@@ -64,6 +66,7 @@ const BlackjackGame = () => {
     }
   }, [isPlayerTurn, playerHand, dealerHand, setPlayerScore, setDealerScore]);
 
+  console.log(playerHand);
   return (
     <div>
       {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
@@ -71,13 +74,22 @@ const BlackjackGame = () => {
       <div id="dealerhand">
         <h2>Dealer</h2>
         <p>{dealerScore !== 0 ? "Score : " + dealerScore : null}</p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {renderPlayerHand(dealerHand)}
+        </div>
       </div>
       {gameStarted && !roundStarted ? (
         <BetAmount betAmount={handleBetAmount} startRound={handleStartRound} />
       ) : null}
+      {isPlayerTurn ? (
+        <PlayerAction deckId={deckId} setPlayerHand={setPlayerHand} />
+      ) : null}
       <div id="playerhand">
         <h2>Player 1</h2>
         <p>{playerScore !== 0 ? "Score : " + playerScore : null}</p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {renderPlayerHand(playerHand)}
+        </div>
       </div>
     </div>
   );
