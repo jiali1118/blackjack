@@ -6,7 +6,7 @@ import PlayerAction from "../PlayerAction/PlayerAction";
 import RenderHand from "../RenderHand/RenderHand";
 import dealerTurn from "../../utilities/dealerTurn";
 import isSoft17 from "../../utilities/isSoft17";
-import hit from "../../utilities/Hit";
+import hit from "../../utilities/hit";
 import newDeck from "../../utilities/newDeck";
 import Player from "../Player/Player";
 import Dealer from "../Dealer/Dealer";
@@ -48,15 +48,20 @@ const BlackjackGame = () => {
         return { ...state, playerScore: action.payload };
       case "SET_DEALER_SCORE":
         return { ...state, dealerScore: action.payload };
+      case "SET_PLAYER_BALANCE":
+        return { ...state, playerBalance: action.payload };
+      case "NEW_ROUND": {
+        return {
+          ...state,
+          playerTurn: false,
+          dealerTurn: false,
+          roundStarted: true,
+        };
+      }
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [playerHands, setPlayerHands] = useState([]);
-  const [dealerHand, setDealerHand] = useState([]);
-  const [isPlayerTurn, setIsPlayerTurn] = useState(false);
-  const [isDealerTurn, setIsDealerTurn] = useState(false);
-  const [deckId, setDeckId] = useState("");
-  const [dealerScore, setDealerScore] = useState(0);
+
   //Initialize Deck
   const startGame = async () => {
     try {
@@ -79,6 +84,7 @@ const BlackjackGame = () => {
     }
   }, [state.roundStarted]);
 
+  //When hand updates, update score
   useEffect(() => {
     let score = calculateHand(state.playerHands);
     dispatch({ type: "SET_PLAYER_SCORE", payload: score });
@@ -89,11 +95,17 @@ const BlackjackGame = () => {
   }, [state.dealerHand]);
 
   useEffect(() => {
-    if (isDealerTurn) {
-      dealerTurn();
+    if (state.isDealerTurn) {
+      console.log("ITS DEALERS TURN");
+      //dealerTurn(state, dispatch);
     }
-  }, [isDealerTurn]);
-  console.log(state.dealerHand);
+  }, [state.isDealerTurn]);
+  useEffect(() => {
+    if (state.playerScore > 21) {
+      dispatch({ type: "SET_PLAYER_TURN", payload: false });
+    }
+  }, [state.playerScore]);
+
   return (
     <div>
       {!state.gameStarted ? (
@@ -103,7 +115,9 @@ const BlackjackGame = () => {
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
-      {state.isPlayerTurn ? <PlayerAction /> : null}
+      {state.isPlayerTurn ? (
+        <PlayerAction state={state} dispatch={dispatch} />
+      ) : null}
       <Player state={state} dispatch={dispatch} />
     </div>
   );

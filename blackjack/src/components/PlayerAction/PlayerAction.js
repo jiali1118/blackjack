@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Hit from "../../utilities/Hit";
+import React, { useState, useReducer } from "react";
+import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 
 function PlayerAction({ state, dispatch }) {
@@ -8,23 +8,31 @@ function PlayerAction({ state, dispatch }) {
     <div>
       <button
         onClick={() => {
-          Hit(state, dispatch);
+          hit(state, dispatch);
           setHitClicked(true);
         }}
       >
         Hit
       </button>
-      {/* {!hitClicked ? (
+      {!hitClicked ? (
         <button
           onClick={() => {
-            double();
+            double(state, dispatch);
+            dispatch({ type: "SET_DEALER_TURN", payload: true });
           }}
         >
           Double
         </button>
-      ) : null} */}
+      ) : null}
 
-      <button onClick={() => {}}>Stand</button>
+      <button
+        onClick={() => {
+          dispatch({ type: "SET_PLAYER_TURN", payload: false });
+          dispatch({ type: "SET_DEALER_TURN", payload: true });
+        }}
+      >
+        Stand
+      </button>
       {/* {props.playerHands.length >= 2 &&
       props.playerHands[0].value === props.playerHands[1].value ? (
         <button

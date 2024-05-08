@@ -9,13 +9,18 @@ const BetAmount = ({ state, dispatch }) => {
   };
 
   const confirmBet = () => {
-    console.log(totalBetAmount);
     dispatch({
       type: "SET_BET_AMOUNT",
       payload: totalBetAmount,
     });
     dispatch({ type: "SET_ROUND_STARTED", payload: true });
     dispatch({ type: "BET_PHASE", payload: false });
+    let newBalance = state.playerBalance - totalBetAmount;
+
+    dispatch({
+      type: "SET_PLAYER_BALANCE",
+      payload: newBalance,
+    });
   };
 
   return (
