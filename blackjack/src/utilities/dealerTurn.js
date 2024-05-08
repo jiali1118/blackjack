@@ -1,6 +1,6 @@
 import isSoft17 from "./isSoft17";
 import hit from "./hit";
-import calculateHand from "./calculateHand";
+
 const dealerTurn = async (state, dispatch) => {
   let score = state.dealerScore;
   if (!isSoft17(state.dealerHand) && score < 17) {

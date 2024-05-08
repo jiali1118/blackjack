@@ -3,6 +3,14 @@ import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 
 function PlayerAction({ state, dispatch }) {
+  const canDouble = () => {
+    let doubleBet = state.betAmount * 2;
+    if (state.playerBalance - doubleBet < 0) {
+      return false;
+    }
+    return true;
+  };
+  const canIDouble = canDouble();
   const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
@@ -14,7 +22,7 @@ function PlayerAction({ state, dispatch }) {
       >
         Hit
       </button>
-      {!hitClicked ? (
+      {!hitClicked && canIDouble ? (
         <button
           onClick={() => {
             double(state, dispatch);

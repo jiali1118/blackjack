@@ -122,6 +122,7 @@ const BlackjackGame = () => {
     }
     if (state.playerScore === 21) {
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
+      dispatch({ type: "SET_DEALER_TURN", payload: true });
     }
   }, [state.playerScore]);
 
