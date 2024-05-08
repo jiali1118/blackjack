@@ -7,6 +7,7 @@ import RenderHand from "../RenderHand/RenderHand";
 import dealerTurn from "../../utilities/dealerTurn";
 import isSoft17 from "../../utilities/isSoft17";
 import hit from "../../utilities/Hit";
+import newDeck from "../../utilities/newDeck";
 const initialState = {
   gameStarted: false,
   roundStarted: false,
@@ -16,14 +17,31 @@ const initialState = {
   playerScore: 0,
   dealerScore: 0,
   betAmount: 0,
+  playerBalance: 1000,
+  playerHands: [],
+  dealerHand: [],
 };
 const BlackjackGame = () => {
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_DEALER_HAND":
+        return {
+          ...state,
+          playerHands: state.playerHands,
+          dealerHand: state.dealerHand,
+        };
+      case "SET_DECK_ID":
+        return { ...state, deckId: action.payload };
+      case "BET_PHASE":
+        return { ...state, betStarted: action.payload };
+    }
+  };
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [gameStarted, setGameStarted] = useState(false);
   const [roundStarted, setRoundStarted] = useState(false);
   const [endGame, setEndGame] = useState(false);
   const [playerHands, setPlayerHands] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
-  const [outcome, setOutcome] = useState(null);
   const [isPlayerTurn, setIsPlayerTurn] = useState(false);
   const [isDealerTurn, setIsDealerTurn] = useState(false);
   const [betAmount, setBetAmount] = useState(0);
@@ -35,7 +53,10 @@ const BlackjackGame = () => {
 
   const startGame = async () => {
     try {
+      console.log("Starting game");
       const newDeckID = await newDeck();
+      dispatch({ type: "SET_DECK_ID", payload: newDeckID });
+      dispatch({ type: "BET_PHASE", payload: true });
       setDeckId(newDeckID);
       setGameStarted(true);
     } catch (err) {
@@ -70,7 +91,6 @@ const BlackjackGame = () => {
       );
     }
   }, [isDealerTurn]);
-
   return (
     <div>
       {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
@@ -82,7 +102,7 @@ const BlackjackGame = () => {
           <RenderHand playerHands={dealerHand} />
         </div>
       </div>
-      {gameStarted && !roundStarted ? (
+      {state.betStarted ? (
         <BetAmount setBetAmount={setBetAmount} roundStarted={setRoundStarted} />
       ) : null}
       {isPlayerTurn ? (
