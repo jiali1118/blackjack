@@ -8,19 +8,16 @@ const Outcome = ({ state, dispatch }) => {
   };
 
   const startNewRound = () => {
-    // Dispatch action to start a new round
-    // For example: dispatch({ type: 'START_NEW_ROUND' });
+    dispatch({ type: "NEW_ROUND" });
   };
 
   return (
     <div>
-      {showModal && (
-        <OutcomeModal
-          outcome="The winner is the dealer"
-          onEndGame={endGame}
-          onStartNewRound={startNewRound}
-        />
-      )}
+      <OutcomeModal
+        outcome={state.outCome}
+        onEndGame={endGame}
+        onStartNewRound={startNewRound}
+      />
     </div>
   );
 };

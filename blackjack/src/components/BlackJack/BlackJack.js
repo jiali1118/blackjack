@@ -10,12 +10,17 @@ import hit from "../../utilities/hit";
 import newDeck from "../../utilities/newDeck";
 import Player from "../Player/Player";
 import Dealer from "../Dealer/Dealer";
+import result from "../../utilities/result";
+import Outcome from "../Outcome/Outcome";
 const initialState = {
   gameStarted: false,
   roundStarted: false,
   roundEnded: false,
   betStarted: false,
+  isPlayerTurn: false,
+  isDealerTurn: false,
   deckId: "",
+  outCome: "",
   playerScore: 0,
   dealerScore: 0,
   betAmount: 0,
@@ -50,12 +55,21 @@ const BlackjackGame = () => {
         return { ...state, dealerScore: action.payload };
       case "SET_PLAYER_BALANCE":
         return { ...state, playerBalance: action.payload };
+      case "OUTCOME":
+        return { ...state, outCome: action.payload };
+      case "SET_ROUND_ENDED":
+        return { ...state, roundEnded: action.payload };
       case "NEW_ROUND": {
         return {
           ...state,
-          playerTurn: false,
-          dealerTurn: false,
-          roundStarted: true,
+          isPlayerTurn: false,
+          isDealerTurn: false,
+          roundStarted: false,
+          betStarted: true,
+          playerHands: [],
+          dealerHand: [],
+          roundEnded: false,
+          outCome: "",
         };
       }
     }
@@ -97,14 +111,25 @@ const BlackjackGame = () => {
   useEffect(() => {
     if (state.isDealerTurn) {
       console.log("ITS DEALERS TURN");
-      //dealerTurn(state, dispatch);
+      dealerTurn(state, dispatch);
     }
-  }, [state.isDealerTurn]);
+  }, [state.isDealerTurn, state.dealerScore]);
   useEffect(() => {
+    //If player bust, skip dealer turn, dealer wins
     if (state.playerScore > 21) {
+      dispatch({ type: "SET_PLAYER_TURN", payload: false });
+      dispatch({ type: "SET_ROUND_ENDED", payload: true });
+    }
+    if (state.playerScore === 21) {
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
     }
   }, [state.playerScore]);
+
+  useEffect(() => {
+    if (state.roundEnded) {
+      result(state, dispatch);
+    }
+  }, [state.roundEnded]);
 
   return (
     <div>
@@ -114,6 +139,9 @@ const BlackjackGame = () => {
       <Dealer state={state} dispatch={dispatch} />
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
+      ) : null}
+      {state.outCome != "" ? (
+        <Outcome state={state} dispatch={dispatch} />
       ) : null}
       {state.isPlayerTurn ? (
         <PlayerAction state={state} dispatch={dispatch} />
