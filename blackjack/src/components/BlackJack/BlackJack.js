@@ -24,16 +24,26 @@ const initialState = {
 const BlackjackGame = () => {
   const reducer = (state, action) => {
     switch (action.type) {
-      case "SET_DEALER_HAND":
-        return {
-          ...state,
-          playerHands: state.playerHands,
-          dealerHand: state.dealerHand,
-        };
       case "SET_DECK_ID":
         return { ...state, deckId: action.payload };
       case "BET_PHASE":
         return { ...state, betStarted: action.payload };
+      case "SET_BET_AMOUNT":
+        return { ...state, betAmount: action.payload };
+      case "SET_ROUND_STARTED":
+        return { ...state, roundStarted: action.payload };
+      case "SET_GAME_STARTED":
+        return { ...state, gameStarted: action.payload };
+      case "SET_PLAYER_HAND":
+        return {
+          ...state,
+          playerHands: [...state.playerHands, ...action.payload],
+        };
+      case "SET_DEALER_HAND":
+        return {
+          ...state,
+          dealerHand: [...state.dealerHand, ...action.payload],
+        };
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -50,15 +60,13 @@ const BlackjackGame = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [dealerScore, setDealerScore] = useState(0);
   //Initialize Deck
-
   const startGame = async () => {
     try {
       console.log("Starting game");
       const newDeckID = await newDeck();
+      dispatch({ type: "SET_GAME_STARTED", payload: true });
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
-      setDeckId(newDeckID);
-      setGameStarted(true);
     } catch (err) {
       console.error(err);
     }
@@ -66,11 +74,11 @@ const BlackjackGame = () => {
 
   //When round is started, call these functions
   useEffect(() => {
-    if (roundStarted) {
-      dealHand(deckId, setPlayerHands, setDealerHand);
-      setIsPlayerTurn(true);
+    if (state.roundStarted) {
+      console.log("DEALING HAND");
+      dealHand(state, dispatch);
     }
-  }, [roundStarted, deckId, setPlayerHands, setDealerHand]);
+  }, [state.roundStarted]);
 
   useEffect(() => {
     calculateHand(playerHands, setPlayerScore);
@@ -91,19 +99,22 @@ const BlackjackGame = () => {
       );
     }
   }, [isDealerTurn]);
+  console.log(state.dealerHand);
   return (
     <div>
-      {!gameStarted ? <button onClick={startGame}>Start Game</button> : null}
+      {!state.gameStarted ? (
+        <button onClick={startGame}>Start Game</button>
+      ) : null}
 
       <div id="dealerhand">
         <h2>Dealer</h2>
         <p>{dealerScore !== 0 ? "Score : " + dealerScore : null}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <RenderHand playerHands={dealerHand} />
+          <RenderHand playerHands={state.dealerHand} />
         </div>
       </div>
       {state.betStarted ? (
-        <BetAmount setBetAmount={setBetAmount} roundStarted={setRoundStarted} />
+        <BetAmount state={state} dispatch={dispatch} />
       ) : null}
       {isPlayerTurn ? (
         <PlayerAction
@@ -120,13 +131,13 @@ const BlackjackGame = () => {
         <h2>Player 1</h2>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <p style={{ padding: "0 10px" }}>
-            {playerScore !== 0 ? "Score : " + playerScore : null}
+            {state.playerScore !== 0 ? "Score : " + playerScore : null}
           </p>
-          <p>{roundStarted ? "Bet: $" + betAmount : null}</p>
+          <p>{state.roundStarted ? "Bet: $" + state.betAmount : null}</p>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <RenderHand playerHands={playerHands} />
+          <RenderHand playerHands={state.playerHands} />
         </div>
       </div>
     </div>
