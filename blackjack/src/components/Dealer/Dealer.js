@@ -1,13 +1,13 @@
 // Dealer.js
 import React from "react";
-
-const Dealer = ({ dealerScore, dealerHand }) => {
+import RenderHand from "../RenderHand/RenderHand";
+const Dealer = ({ state, dispatch }) => {
   return (
     <div id="dealerhand">
       <h2>Dealer</h2>
-      <p>{dealerScore !== 0 ? "Score : " + dealerScore : null}</p>
+      <p>{state.dealerScore !== 0 ? "Score : " + state.dealerScore : null}</p>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <RenderHand playerHands={dealerHand} />
+        <RenderHand playerHands={state.dealerHand} />
       </div>
     </div>
   );

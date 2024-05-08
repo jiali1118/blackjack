@@ -1,18 +1,18 @@
 // Player.js
 import React from "react";
-
-const Player = ({ playerScore, roundStarted, betAmount, playerHands }) => {
+import RenderHand from "../RenderHand/RenderHand";
+const Player = ({ state, dispatch }) => {
   return (
     <div id="playerhand">
       <h2>Player 1</h2>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <p style={{ padding: "0 10px" }}>
-          {playerScore !== 0 ? "Score : " + playerScore : null}
+          {state.playerScore !== 0 ? "Score : " + state.playerScore : null}
         </p>
-        <p>{roundStarted ? "Bet: $" + betAmount : null}</p>
+        <p>{state.roundStarted ? "Bet: $" + state.betAmount : null}</p>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <RenderHand playerHands={playerHands} />
+        <RenderHand playerHands={state.playerHands} />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import fetchCard from "../components/fetchCard/fetchCard";
-import calculateHand from "./CalculateHand";
+import calculateHand from "./calculateHand";
 
 const hit = async (deckID, setPlayerHand, hand, setPlayerScore) => {
   try {

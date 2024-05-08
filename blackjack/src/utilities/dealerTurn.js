@@ -1,6 +1,6 @@
 import isSoft17 from "./isSoft17";
 import hit from "./Hit";
-import calculateHand from "./CalculateHand";
+import calculateHand from "./calculateHand";
 const dealerTurn = async (
   dealerHand,
   dealerScore,
