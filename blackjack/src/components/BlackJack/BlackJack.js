@@ -72,6 +72,9 @@ const BlackjackGame = () => {
           outCome: "",
         };
       }
+      case "NEW_GAME": {
+        return initialState;
+      }
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -132,6 +135,11 @@ const BlackjackGame = () => {
     }
   }, [state.roundEnded]);
 
+  // useEffect(() => {
+  //   if (state.playerBalance === 0) {
+  //     dispatch({ type: "NEW_GAME" });
+  //   }
+  // }, [state.playerBalance]);
   return (
     <div>
       {!state.gameStarted ? (
@@ -141,7 +149,7 @@ const BlackjackGame = () => {
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
-      {state.outCome != "" ? (
+      {state.outCome !== "" ? (
         <Outcome state={state} dispatch={dispatch} />
       ) : null}
       {state.isPlayerTurn ? (

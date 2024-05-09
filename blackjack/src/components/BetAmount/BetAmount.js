@@ -13,7 +13,8 @@ const BetAmount = ({ state, dispatch }) => {
   const confirmBet = () => {
     let newBalance = state.playerBalance - totalBetAmount;
     if (newBalance < 0) {
-      setErrorMsg("NOT ENOUGH FUNDS");
+      //check to make sure user has enough balance.
+      setErrorMsg("NOT ENOUGH FUNDS, REDO BE AMOUNT");
       setTotalBetAmount(0);
     } else {
       dispatch({
@@ -31,15 +32,32 @@ const BetAmount = ({ state, dispatch }) => {
 
   return (
     <div>
-      <div>Total Bet Amount: ${totalBetAmount}</div>
-      <div>Player Balance: ${state.playerBalance}</div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <p style={{ padding: "0 10px" }}>Total Bet Amount: ${totalBetAmount}</p>
+        <p>Player Balance: ${state.playerBalance}</p>
+      </div>
+      {state.playerBalance < 501 ? (
+        <div>
+          <button onClick={() => selectBetAmount(1)}>$1</button>
+          <button onClick={() => selectBetAmount(5)}>$5</button>
+          <button onClick={() => selectBetAmount(20)}>$20</button>
+          <button onClick={() => selectBetAmount(50)}>$50</button>
+          <button onClick={() => selectBetAmount(100)}>$100</button>
+          <button onClick={() => confirmBet()}>Deal</button>
+        </div>
+      ) : null}
 
-      <button onClick={() => selectBetAmount(1)}>Bet $1</button>
-      <button onClick={() => selectBetAmount(5)}>Bet $5</button>
-      <button onClick={() => selectBetAmount(10)}>Bet $10</button>
-      <button onClick={() => selectBetAmount(20)}>Bet $20</button>
-      <button onClick={() => selectBetAmount(100)}>Bet $100</button>
-      <button onClick={() => confirmBet()}>Deal</button>
+      {state.playerBalance > 501 ? (
+        <div>
+          <button onClick={() => selectBetAmount(20)}>$20</button>
+          <button onClick={() => selectBetAmount(50)}>$50</button>
+          <button onClick={() => selectBetAmount(100)}>$100</button>
+          <button onClick={() => selectBetAmount(250)}>$250</button>
+          <button onClick={() => selectBetAmount(500)}>$500</button>
+          <button onClick={() => confirmBet()}>Deal</button>
+        </div>
+      ) : null}
+
       {errorMsg && <p>{errorMsg}</p>}
     </div>
   );

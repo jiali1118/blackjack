@@ -4,7 +4,7 @@ import OutcomeModal from "./OutcomeModal";
 const Outcome = ({ state, dispatch }) => {
   const endGame = () => {
     // Dispatch action to end the game
-    // For example: dispatch({ type: 'END_GAME' });
+    dispatch({ type: "NEW_GAME" });
   };
 
   const startNewRound = () => {
