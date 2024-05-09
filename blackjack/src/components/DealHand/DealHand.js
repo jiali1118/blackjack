@@ -29,10 +29,27 @@ const dealHand = async (state, dispatch) => {
     const dealerCard2Data = await dealerCard2Response.json();
     const dealerCard2 = dealerCard2Data.cards[0];
 
-    //Storing player and dealer hand
-    console.log([dealerCard1, dealerCard2]);
-    dispatch({ type: "SET_DEALER_HAND", payload: [dealerCard1, dealerCard2] });
-    dispatch({ type: "SET_PLAYER_HAND", payload: [playerCard1, playerCard2] });
+    // Dispatch player's first card
+    dispatch({ type: "ADD_PLAYER_CARD", payload: playerCard1Data.cards[0] });
+    // Delay for 1 second
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Dispatch dealer's hidden card
+    dispatch({
+      type: "ADD_DEALER_HIDDEN_CARD",
+      payload: dealerCard1Data.cards[0],
+    });
+    dispatch({ type: "ADD_DEALER_CARD", payload: state.hiddenCard });
+    // Delay for 1 second
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Dispatch player's second card
+    dispatch({ type: "ADD_PLAYER_CARD", payload: playerCard2Data.cards[0] });
+
+    // Delay for 1 second
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Dispatch dealer's second card
+    dispatch({ type: "ADD_DEALER_CARD", payload: dealerCard2Data.cards[0] });
   } catch (error) {
     console.error("Error dealing hand:", error);
     // Handle error (e.g., display error message to the user)

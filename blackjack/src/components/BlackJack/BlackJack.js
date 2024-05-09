@@ -12,6 +12,7 @@ import Player from "../Player/Player";
 import Dealer from "../Dealer/Dealer";
 import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
+import cardBackImage from "../../images/cardBack.png";
 const initialState = {
   gameStarted: false,
   roundStarted: false,
@@ -27,6 +28,13 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
+  dealerHiddenCard: null,
+  hiddenCard: {
+    code: "hidden",
+    image: cardBackImage,
+    value: "0",
+    suit: "NONE",
+  },
 };
 const BlackjackGame = () => {
   const reducer = (state, action) => {
@@ -59,6 +67,23 @@ const BlackjackGame = () => {
         return { ...state, outCome: action.payload };
       case "SET_ROUND_ENDED":
         return { ...state, roundEnded: action.payload };
+      case "ADD_PLAYER_CARD":
+        return {
+          ...state,
+          playerHands: [...state.playerHands, action.payload],
+        };
+      case "ADD_DEALER_CARD":
+        return {
+          ...state,
+          dealerHand: [...state.dealerHand, action.payload],
+        };
+      case "ADD_DEALER_HIDDEN_CARD":
+        return {
+          ...state,
+          dealerHiddenCard: action.payload,
+        };
+      case "REVEAL_HIDDEN_CARD":
+        return {};
       case "NEW_ROUND": {
         return {
           ...state,

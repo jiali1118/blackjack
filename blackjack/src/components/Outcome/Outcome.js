@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import OutcomeModal from "./OutcomeModal";
 
 const Outcome = ({ state, dispatch }) => {
