@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState } from "react";
 import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 
@@ -10,6 +10,7 @@ function PlayerAction({ state, dispatch }) {
     }
     return true;
   };
+  console.log(canDouble());
   const canIDouble = canDouble();
   const [hitClicked, setHitClicked] = useState(false);
   return (

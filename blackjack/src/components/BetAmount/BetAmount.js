@@ -23,10 +23,6 @@ const BetAmount = ({ state, dispatch }) => {
       });
       dispatch({ type: "SET_ROUND_STARTED", payload: true });
       dispatch({ type: "BET_PHASE", payload: false });
-      dispatch({
-        type: "SET_PLAYER_BALANCE",
-        payload: newBalance,
-      });
     }
   };
 

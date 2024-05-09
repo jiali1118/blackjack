@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
 import PlayerAction from "../PlayerAction/PlayerAction";
-import RenderHand from "../RenderHand/RenderHand";
 import dealerTurn from "../../utilities/dealerTurn";
-import isSoft17 from "../../utilities/isSoft17";
-import hit from "../../utilities/hit";
 import newDeck from "../../utilities/newDeck";
 import Player from "../Player/Player";
 import Dealer from "../Dealer/Dealer";
@@ -14,12 +11,14 @@ import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
 const initialState = {
+  //Initial game state
   gameStarted: false,
   roundStarted: false,
   roundEnded: false,
   betStarted: false,
   isPlayerTurn: false,
   isDealerTurn: false,
+  hidden: true,
   deckId: "",
   outCome: "",
   playerScore: 0,
@@ -28,7 +27,7 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
-  dealerHiddenCard: null,
+  dealerHiddenCard: {},
   hiddenCard: {
     code: "hidden",
     image: cardBackImage,
@@ -83,7 +82,11 @@ const BlackjackGame = () => {
           dealerHiddenCard: action.payload,
         };
       case "REVEAL_HIDDEN_CARD":
-        return {};
+        return {
+          ...state,
+          dealerHand: [state.dealerHiddenCard, ...state.dealerHand.slice(1)],
+          hidden: false,
+        };
       case "NEW_ROUND": {
         return {
           ...state,
@@ -95,11 +98,15 @@ const BlackjackGame = () => {
           dealerHand: [],
           roundEnded: false,
           outCome: "",
+          hidden: true,
+          dealerHiddenCard: {},
         };
       }
       case "NEW_GAME": {
         return initialState;
       }
+      default:
+        return state;
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -136,24 +143,27 @@ const BlackjackGame = () => {
     dispatch({ type: "SET_DEALER_SCORE", payload: score });
   }, [state.dealerHand]);
 
+  //Dealer's Turn
   useEffect(() => {
-    if (state.isDealerTurn) {
+    if (state.isDealerTurn && state.hidden) {
+      dispatch({ type: "REVEAL_HIDDEN_CARD" });
+    }
+    if (state.isDealerTurn && !state.hidden) {
       console.log("ITS DEALERS TURN");
-      dealerTurn(state, dispatch);
+      setTimeout(() => {
+        dealerTurn(state, dispatch);
+      }, 2000);
     }
   }, [state.isDealerTurn, state.dealerScore]);
   useEffect(() => {
     //If player bust, skip dealer turn, dealer wins
-    if (state.playerScore > 21) {
+    if (state.playerScore >= 21) {
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
       dispatch({ type: "SET_ROUND_ENDED", payload: true });
     }
-    if (state.playerScore === 21) {
-      dispatch({ type: "SET_PLAYER_TURN", payload: false });
-      dispatch({ type: "SET_DEALER_TURN", payload: true });
-    }
   }, [state.playerScore]);
 
+  //When round is over
   useEffect(() => {
     if (state.roundEnded) {
       result(state, dispatch);
@@ -165,12 +175,13 @@ const BlackjackGame = () => {
   //     dispatch({ type: "NEW_GAME" });
   //   }
   // }, [state.playerBalance]);
+
   return (
     <div>
       {!state.gameStarted ? (
         <button onClick={startGame}>Start Game</button>
       ) : null}
-      <Dealer state={state} dispatch={dispatch} />
+      {state.gameStarted ? <Dealer state={state} dispatch={dispatch} /> : null}
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
@@ -180,7 +191,7 @@ const BlackjackGame = () => {
       {state.isPlayerTurn ? (
         <PlayerAction state={state} dispatch={dispatch} />
       ) : null}
-      <Player state={state} dispatch={dispatch} />
+      {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
     </div>
   );
 };
