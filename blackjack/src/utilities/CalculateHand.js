@@ -1,7 +1,4 @@
-import React from "react";
-import dealHand from "../DealHand/DealHand";
-
-function calculateHand(hand, setScore) {
+function calculateHand(hand) {
   let total = 0;
   let hasAce = false;
 
@@ -24,7 +21,7 @@ function calculateHand(hand, setScore) {
   if (hasAce && total + 10 <= 21) {
     total += 10;
   }
-  setScore(total);
+  console.log(total);
   return total;
 }
 

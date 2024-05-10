@@ -1,32 +1,48 @@
-import React from "react";
-import Hit from "../Hit/Hit";
-function playerAction(props) {
+import React, { useState } from "react";
+import hit from "../../utilities/hit";
+import double from "../../utilities/double";
+
+function PlayerAction({ state, dispatch }) {
+  const canDouble = () => {
+    let doubleBet = state.betAmount * 2;
+    if (state.playerBalance - doubleBet < 0) {
+      return false;
+    }
+    return true;
+  };
+  console.log(canDouble());
+  const canIDouble = canDouble();
+  const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
       <button
         onClick={() => {
-          console.log(props.deckId);
-          Hit(props.deckId, props.setPlayerHand);
+          hit(state, dispatch);
+          setHitClicked(true);
         }}
       >
         Hit
       </button>
+      {!hitClicked && canIDouble ? (
+        <button
+          onClick={() => {
+            double(state, dispatch); //sets playerturn to false immediately
+          }}
+        >
+          Double
+        </button>
+      ) : null}
+
       <button
         onClick={() => {
-          console.log("CLICKED!");
-        }}
-      >
-        Double
-      </button>
-      <button
-        onClick={() => {
-          console.log("CLICKED!");
+          dispatch({ type: "SET_PLAYER_TURN", payload: false });
+          dispatch({ type: "SET_DEALER_TURN", payload: true });
         }}
       >
         Stand
       </button>
-      {/* {playerHand.hand.length >= 2 &&
-      playerHand.hand[0].value === playerHand.hand[1].value ? (
+      {/* {props.playerHands.length >= 2 &&
+      props.playerHands[0].value === props.playerHands[1].value ? (
         <button
           onClick={() => {
             console.log("CLICKED!");
@@ -39,4 +55,4 @@ function playerAction(props) {
   );
 }
 
-export default playerAction;
+export default PlayerAction;
