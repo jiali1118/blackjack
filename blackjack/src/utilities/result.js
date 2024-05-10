@@ -17,7 +17,7 @@ const result = (state, dispatch) => {
           console.log("Dealer Wins!");
         }
       } else {
-        dispatch({ type: "OUTCOME", payload: "Tie!" });
+        dispatch({ type: "OUTCOME", payload: "DEALER PUSHED" });
         console.log("Tie!");
       }
     } else {

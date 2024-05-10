@@ -26,8 +26,8 @@ function PlayerAction({ state, dispatch }) {
       {!hitClicked && canIDouble ? (
         <button
           onClick={() => {
-            double(state, dispatch);
-            dispatch({ type: "SET_DEALER_TURN", payload: true });
+            double(state, dispatch); //sets playerturn to false immediately
+            //dispatch({ type: "SET_DEALER_TURN", payload: true });
           }}
         >
           Double

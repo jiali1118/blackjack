@@ -111,7 +111,7 @@ const BlackjackGame = () => {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  //Initialize Deck
+  //Function to startGame
   const startGame = async () => {
     try {
       console.log("Starting game");
@@ -124,7 +124,8 @@ const BlackjackGame = () => {
     }
   };
 
-  //When round is started, call these functions
+  //After confirming bet, player round starts
+  //when round is started, dealHand, then set phase to player's turn
   useEffect(() => {
     if (state.roundStarted) {
       console.log("DEALING HAND");
@@ -155,26 +156,32 @@ const BlackjackGame = () => {
       }, 2000);
     }
   }, [state.isDealerTurn, state.dealerScore]);
+
+  //Upon user score change, check for blackjack or BUST
   useEffect(() => {
     //If player bust, skip dealer turn, dealer wins
-    if (state.playerScore >= 21) {
+    if (state.playerScore > 21) {
+      console.log("User Busted, now going straight to results");
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
       dispatch({ type: "SET_ROUND_ENDED", payload: true });
     }
+    if (state.playerHands.length === 2 && state.playerScore === 21) {
+      console.log("BLACKJACK!");
+      dispatch({ type: "SET_PLAYER_TURN", payload: false });
+      dispatch({ type: "SET_ROUND_ENDED", payload: true });
+    } else if (state.playerScore === 21) {
+      dispatch({ type: "SET_PLAYER_TURN", payload: false });
+      dispatch({ type: "SET_DEALER_TURN", payload: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.playerScore]);
 
-  //When round is over
+  //Listens for when round is over, calculate results.
   useEffect(() => {
     if (state.roundEnded) {
       result(state, dispatch);
     }
   }, [state.roundEnded]);
-
-  // useEffect(() => {
-  //   if (state.playerBalance === 0) {
-  //     dispatch({ type: "NEW_GAME" });
-  //   }
-  // }, [state.playerBalance]);
 
   return (
     <div>
