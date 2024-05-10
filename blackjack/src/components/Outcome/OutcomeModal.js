@@ -5,7 +5,7 @@ const OutcomeModal = ({ outcome, onEndGame, onStartNewRound }) => {
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-content">
-          <h2>{outcome}</h2>
+          <h2 class="outcome-text">{outcome}</h2>
           <div>
             <button onClick={onEndGame}>End Game</button>
             {outcome !== "OUT OF FUNDS" ? (

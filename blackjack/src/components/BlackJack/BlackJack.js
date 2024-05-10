@@ -178,6 +178,9 @@ const BlackjackGame = () => {
 
   return (
     <div>
+      {state.outCome !== "" ? (
+        <Outcome state={state} dispatch={dispatch} />
+      ) : null}
       {!state.gameStarted ? (
         <button onClick={startGame}>Start Game</button>
       ) : null}
@@ -185,13 +188,10 @@ const BlackjackGame = () => {
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
-      {state.outCome !== "" ? (
-        <Outcome state={state} dispatch={dispatch} />
-      ) : null}
+      {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
       {state.isPlayerTurn ? (
         <PlayerAction state={state} dispatch={dispatch} />
       ) : null}
-      {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
     </div>
   );
 };
