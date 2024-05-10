@@ -8,7 +8,9 @@ const OutcomeModal = ({ outcome, onEndGame, onStartNewRound }) => {
           <h2>{outcome}</h2>
           <div>
             <button onClick={onEndGame}>End Game</button>
-            <button onClick={onStartNewRound}>Start New Round</button>
+            {outcome !== "OUT OF FUNDS" ? (
+              <button onClick={onStartNewRound}>Start New Round</button>
+            ) : null}
           </div>
         </div>
       </div>
