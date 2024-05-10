@@ -1,6 +1,7 @@
 const result = (state, dispatch) => {
   console.log("CALCULATING RESULTS");
   let losingResult = state.playerBalance - state.betAmount;
+  setTimeout(() => {}, 500);
   if (state.playerScore <= 21) {
     if (state.dealerScore <= 21) {
       if (state.playerScore > state.dealerScore) {

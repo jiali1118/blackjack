@@ -132,6 +132,7 @@ const BlackjackGame = () => {
       dealHand(state, dispatch);
       dispatch({ type: "SET_PLAYER_TURN", payload: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundStarted]);
 
   //When hand updates, update score
@@ -144,7 +145,7 @@ const BlackjackGame = () => {
     dispatch({ type: "SET_DEALER_SCORE", payload: score });
   }, [state.dealerHand]);
 
-  //Dealer's Turn
+  //Listens for when dealerturn is t rue
   useEffect(() => {
     if (state.isDealerTurn && state.hidden) {
       dispatch({ type: "REVEAL_HIDDEN_CARD" });
@@ -155,21 +156,20 @@ const BlackjackGame = () => {
         dealerTurn(state, dispatch);
       }, 2000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.isDealerTurn, state.dealerScore]);
 
   //Upon user score change, check for blackjack or BUST
   useEffect(() => {
-    //If player bust, skip dealer turn, dealer wins
-    if (state.playerScore > 21) {
-      console.log("User Busted, now going straight to results");
-      dispatch({ type: "SET_PLAYER_TURN", payload: false });
-      dispatch({ type: "SET_ROUND_ENDED", payload: true });
-    }
-    if (state.playerHands.length === 2 && state.playerScore === 21) {
-      console.log("BLACKJACK!");
+    //endround if player has blackjack or bust.
+    if (
+      state.playerScore > 21 ||
+      (state.playerHands.length === 2 && state.playerScore === 21)
+    ) {
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
       dispatch({ type: "SET_ROUND_ENDED", payload: true });
     } else if (state.playerScore === 21) {
+      //if player hits and lands 21, start dealer turn immediately
       dispatch({ type: "SET_PLAYER_TURN", payload: false });
       dispatch({ type: "SET_DEALER_TURN", payload: true });
     }
@@ -181,6 +181,7 @@ const BlackjackGame = () => {
     if (state.roundEnded) {
       result(state, dispatch);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
   return (
