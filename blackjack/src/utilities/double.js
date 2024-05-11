@@ -1,4 +1,4 @@
-import fetchCard from "../components/fetchCard/fetchCard";
+import fetchCard from "../utilities/fetchCard";
 
 const double = async (state, dispatch) => {
   try {
