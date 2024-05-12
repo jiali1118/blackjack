@@ -27,6 +27,7 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
+  splitHand: [[]],
   dealerHiddenCard: {},
   hiddenCard: {
     code: "hidden",
@@ -82,9 +83,12 @@ const BlackjackGame = () => {
           dealerHiddenCard: action.payload,
         };
       case "REVEAL_HIDDEN_CARD":
+        const newDealerHand = [...state.dealerHand];
+        newDealerHand.pop();
+        newDealerHand.push(state.dealerHiddenCard);
         return {
           ...state,
-          dealerHand: [state.dealerHiddenCard, ...state.dealerHand.slice(1)],
+          dealerHand: newDealerHand,
           hidden: false,
         };
       case "NEW_ROUND": {
