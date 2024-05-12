@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import hit from "../../utilities/hit";
 import double from "../../utilities/double";
-
-function PlayerAction({ state, dispatch }) {
+import split from "../../utilities/split";
+function PlayerAction({ state, dispatch, index }) {
   const canDouble = () => {
     let doubleBet = state.betAmount * 2;
     if (state.playerBalance - doubleBet < 0) {
@@ -10,14 +10,13 @@ function PlayerAction({ state, dispatch }) {
     }
     return true;
   };
-  console.log(canDouble());
   const canIDouble = canDouble();
   const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
       <button
         onClick={() => {
-          hit(state, dispatch);
+          hit(state, dispatch, index);
           setHitClicked(true);
         }}
       >
@@ -32,7 +31,19 @@ function PlayerAction({ state, dispatch }) {
           Double
         </button>
       ) : null}
+      {/* {state.playerHands.length >= 2 &&
+      state.playerHands[0].value === state.playerHands[1].value ? (
+        
+      ) : null} */}
+      <button
+        onClick={() => {
+          split(state, dispatch);
+        }}
+      >
+        Split
+      </button>
 
+      {/*Action for Standing*/}
       <button
         onClick={() => {
           dispatch({ type: "SET_PLAYER_TURN", payload: false });
@@ -41,16 +52,6 @@ function PlayerAction({ state, dispatch }) {
       >
         Stand
       </button>
-      {/* {props.playerHands.length >= 2 &&
-      props.playerHands[0].value === props.playerHands[1].value ? (
-        <button
-          onClick={() => {
-            console.log("CLICKED!");
-          }}
-        >
-          Split
-        </button>
-      ) : null} */}
     </div>
   );
 }

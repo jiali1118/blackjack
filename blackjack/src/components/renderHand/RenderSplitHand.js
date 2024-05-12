@@ -1,16 +1,26 @@
 import React from "react";
-
-const RenderSplitHand = (props) => {
-  return props.splitHand.map((nestedArray, index) => (
+import RenderHand from "./RenderHand"; // Import the RenderHand component
+import PlayerAction from "../PlayerAction/PlayerAction";
+import cardBackImage from "../../images/cardBack.png";
+const hidden = {
+  code: "hidden",
+  image: cardBackImage,
+  value: "0",
+  suit: "NONE",
+};
+const RenderSplitHand = ({ playerHands, state, dispatch }) => {
+  // const splitHand = [
+  //   [hidden, hidden],
+  //   [hidden, hidden],
+  //   [hidden, hidden],
+  //   [hidden, hidden],
+  // ];
+  // console.log(splitHand);
+  return playerHands.map((nestedArray, index) => (
     <div key={index}>
-      {nestedArray.map((card, nestedIndex) => (
-        <img
-          key={nestedIndex}
-          src={card.image}
-          alt={`${card.value} of ${card.suit}`}
-          style={{ width: "100px", margin: "5px" }} // Adjust styling as needed
-        />
-      ))}
+      {/* Use the RenderHand component for each nested array */}
+      <PlayerAction state={state} dispatch={dispatch} index={index} />
+      <RenderHand playerHands={nestedArray} />
     </div>
   ));
 };

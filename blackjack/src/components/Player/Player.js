@@ -1,6 +1,7 @@
 // Player.js
 import React from "react";
 import RenderHand from "../RenderHand/RenderHand";
+import RenderSplitHand from "../RenderHand/RenderSplitHand";
 const Player = ({ state, dispatch }) => {
   return (
     <div id="playerhand">
@@ -17,9 +18,21 @@ const Player = ({ state, dispatch }) => {
         </p>
         <p>{state.roundStarted ? "Balance: $" + state.playerBalance : null}</p>
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <RenderHand playerHands={state.playerHands} />
-      </div>
+      {!state.handIsSplit ? (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <RenderHand playerHands={state.playerHands} />
+        </div>
+      ) : null}
+
+      {state.handIsSplit ? (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <RenderSplitHand
+            playerHands={state.splitHand}
+            state={state}
+            dispatch={dispatch}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -27,7 +27,8 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
-  splitHand: [[]],
+  splitHand: [[], []],
+  handIsSplit: false,
   dealerHiddenCard: {},
   hiddenCard: {
     code: "hidden",
@@ -104,10 +105,24 @@ const BlackjackGame = () => {
           outCome: "",
           hidden: true,
           dealerHiddenCard: {},
+          splitHand: [[], []],
+          handIsSplit: false,
         };
       }
       case "NEW_GAME": {
         return initialState;
+      }
+      case "SET_SPLIT_HAND": {
+        return {
+          ...state,
+          handIsSplit: action.payload,
+        };
+      }
+      case "UPDATE_SPLIT_HAND": {
+        return {
+          ...state,
+          splitHand: action.payload,
+        };
       }
       default:
         return state;
@@ -188,6 +203,9 @@ const BlackjackGame = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
+  console.log(state.splitHand);
+  console.log(state.splitHand);
+  console.log(state.handIsSplit);
   return (
     <div>
       {state.outCome !== "" ? (
@@ -201,7 +219,7 @@ const BlackjackGame = () => {
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
       {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
-      {state.isPlayerTurn ? (
+      {state.isPlayerTurn && !state.handIsSplit ? (
         <PlayerAction state={state} dispatch={dispatch} />
       ) : null}
     </div>
