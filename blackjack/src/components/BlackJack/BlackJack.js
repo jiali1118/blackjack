@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef, isEqual } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
@@ -27,7 +27,9 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
-  splitHand: [[], []],
+  splitedHand: { hand: [], score: 0 },
+  splitHand: [],
+  calculateSplit: true,
   handIsSplit: false,
   dealerHiddenCard: {},
   hiddenCard: {
@@ -124,6 +126,18 @@ const BlackjackGame = () => {
           splitHand: action.payload,
         };
       }
+      case "CALCULATE_SPLIT": {
+        const updatedSplitHand = state.splitHand.map((splitHand) => {
+          const score = calculateHand(splitHand.hand);
+          return { hand: splitHand.hand, score }; // Return an object with the hand and its calculated score
+        });
+
+        // Return the updated state with the calculated split hand scores
+        return {
+          ...state,
+          splitHand: updatedSplitHand,
+        };
+      }
       default:
         return state;
     }
@@ -203,9 +217,20 @@ const BlackjackGame = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
-  console.log(state.splitHand);
-  console.log(state.splitHand);
-  console.log(state.handIsSplit);
+  // useEffect(() => {
+  //   // Calculate scores for each hand in state.splitHand
+  //   console.log("Updating split hand score");
+  //   if (state.calculateSplit) {
+  //     const updatedSplitHand = state.splitHand.map((splitHand) => {
+  //       const score = calculateHand(splitHand.hand);
+  //       return { hand: splitHand.hand, score }; // Return an object with the hand and its calculated score
+  //     });
+  //     console.log(updatedSplitHand);
+  //     dispatch({ type: "CALCULATE_SPLIT", payload: false });
+  //     dispatch({ type: "UPDATE_SPLIT_HAND", payload: updatedSplitHand });
+  //   }
+  // }, [state.splitHand]);
+
   return (
     <div>
       {state.outCome !== "" ? (

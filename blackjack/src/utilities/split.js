@@ -1,4 +1,6 @@
-const split = (state, dispatch) => {
+import calculateHand from "./calculateHand";
+
+const split = (state, dispatch, index) => {
   console.log("I'm SPLITTING!");
   const playerHand = [...state.playerHands];
   const newSplitHand = [...state.splitHand];
@@ -6,23 +8,17 @@ const split = (state, dispatch) => {
   let secondCard = playerHand.pop();
   let firstCard = playerHand.pop();
 
-  newSplitHand[0].push(firstCard);
-  newSplitHand[1].push(secondCard);
+  let firstHand = { hand: [firstCard], score: firstCard.value };
+  let secondHand = { hand: [secondCard], score: secondCard.value };
+
+  newSplitHand.push(firstHand);
+  newSplitHand.push(secondHand);
   console.log("Now returning new state");
   console.log(newSplitHand);
+  console.log(newSplitHand[0].hand[0]);
   dispatch({ type: "SET_SPLIT_HAND", payload: true });
-  //   return {
-  //     ...state,
-  //     splitHand: newSplitHand,
-  //   };
-  //setTimeout(() => {}, 500);
-  //   for (let i = 0; i < state.splitHand.length; i++) {
-  //     // Log the index of the nested array
-  //     console.log(`Split Hand ${i + 1}:`);
-
-  //     // Log the contents of the nested array
-  //     console.log(state.splitHand[i]);
-  //   }
+  dispatch({ type: "UPDATE_SPLIT_HAND", payload: newSplitHand });
+  dispatch({ type: "CALCULATE_SPLIT" });
 };
 
 export default split;

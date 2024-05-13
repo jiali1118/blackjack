@@ -17,12 +17,16 @@ const hit = async (state, dispatch, index) => {
     //Updating split hand.
     if (state.isPlayerTurn && state.handIsSplit) {
       const updatedSplitHand = [...state.splitHand];
-      updatedSplitHand[index] = updatedSplitHand[index] || [];
+      updatedSplitHand[index] = updatedSplitHand[index] || {
+        hand: [],
+        score: 0,
+      };
       //updatedSplitHand[index] = [...updatedSplitHand[index], data.cards[0]];
-      updatedSplitHand[index].push(data.cards[0]);
+      updatedSplitHand[index].hand.push(data.cards[0]);
       // Create the updated state object
       console.log(updatedSplitHand);
       dispatch({ type: "UPDATE_SPLIT_HAND", payload: updatedSplitHand });
+      dispatch({ type: "CALCULATE_SPLIT" });
       console.log("Player's turn, getting card for hand at index:", index);
     }
     if (state.isDealerTurn) {

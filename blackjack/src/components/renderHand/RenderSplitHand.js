@@ -20,7 +20,9 @@ const RenderSplitHand = ({ playerHands, state, dispatch }) => {
     <div key={index}>
       {/* Use the RenderHand component for each nested array */}
       <PlayerAction state={state} dispatch={dispatch} index={index} />
-      <RenderHand playerHands={nestedArray} />
+      <RenderHand playerHands={nestedArray.hand} />
+      {/* Render the score for the current hand */}
+      <p>Score: {nestedArray.score}</p>
     </div>
   ));
 };
