@@ -31,17 +31,16 @@ function PlayerAction({ state, dispatch, index }) {
           Double
         </button>
       ) : null}
-      {/* {state.playerHands.length >= 2 &&
+      {state.playerHands.length >= 2 &&
       state.playerHands[0].value === state.playerHands[1].value ? (
-        
-      ) : null} */}
-      <button
-        onClick={() => {
-          split(state, dispatch);
-        }}
-      >
-        Split
-      </button>
+        <button
+          onClick={() => {
+            split(state, dispatch);
+          }}
+        >
+          Split
+        </button>
+      ) : null}
 
       {/*Action for Standing*/}
       <button

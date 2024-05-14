@@ -46,19 +46,19 @@ function PlayerSplitAction({ state, dispatch, index }) {
         </button>
       ) : null}
 
-      {/* {state.splitHand[index].hand.length === 2 &&
+      {state.splitHand[index].hand.length === 2 &&
       state.splitHand[index].hand[0].value ===
         state.splitHand[index].hand[1].value ? (
-        
-      ) : null} */}
-      <button
-        onClick={() => {
-          split(state, dispatch, index);
-        }}
-        disabled={!isCurrentHand}
-      >
-        Split
-      </button>
+        <button
+          onClick={() => {
+            split(state, dispatch, index);
+          }}
+          disabled={!isCurrentHand}
+        >
+          Split
+        </button>
+      ) : null}
+
       {/*Action for Standing*/}
       <button onClick={handleStand} disabled={!isCurrentHand}>
         Stand
