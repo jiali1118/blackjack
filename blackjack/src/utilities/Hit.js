@@ -20,6 +20,7 @@ const hit = async (state, dispatch, index) => {
       updatedSplitHand[index] = updatedSplitHand[index] || {
         hand: [],
         score: 0,
+        balance: 0,
       };
       //updatedSplitHand[index] = [...updatedSplitHand[index], data.cards[0]];
       updatedSplitHand[index].hand.push(data.cards[0]);

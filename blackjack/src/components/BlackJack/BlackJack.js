@@ -10,6 +10,8 @@ import Dealer from "../Dealer/Dealer";
 import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
+import splitResult from "../../utilities/splitResult";
+import split from "../../utilities/split";
 const initialState = {
   //Initial game state
   gameStarted: false,
@@ -116,35 +118,23 @@ const BlackjackGame = () => {
         return initialState;
       }
       case "SET_SPLIT_HAND": {
-        return {
-          ...state,
-          handIsSplit: action.payload,
-        };
+        return { ...state, handIsSplit: action.payload };
       }
       case "UPDATE_SPLIT_HAND": {
-        return {
-          ...state,
-          splitHand: action.payload,
-        };
+        return { ...state, splitHand: action.payload };
       }
       case "CALCULATE_SPLIT": {
         const updatedSplitHand = state.splitHand.map((splitHand) => {
           const score = calculateHand(splitHand.hand);
-          return { hand: splitHand.hand, score }; // Return an object with the hand and its calculated score
+          return { ...splitHand, score }; // Spread the existing properties and include the updated score
         });
 
         // Return the updated state with the calculated split hand scores
-        return {
-          ...state,
-          splitHand: updatedSplitHand,
-        };
+        return { ...state, splitHand: updatedSplitHand };
       }
       case "INCREMENT_HAND_INDEX": {
         let index = state.currentHandIndex + 1;
-        return {
-          ...state,
-          currentHandIndex: index,
-        };
+        return { ...state, currentHandIndex: index };
       }
       default:
         return state;
@@ -219,14 +209,17 @@ const BlackjackGame = () => {
 
   //Listens for when round is over, calculate results.
   useEffect(() => {
-    if (state.roundEnded) {
+    if (state.roundEnded && !state.handIsSplit) {
       result(state, dispatch);
+    } else if (state.roundEnded && state.handIsSplit) {
+      splitResult(state, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
   useEffect(() => {
     if (state.handIsSplit) {
+      //if busted
       if (state.splitHand[state.currentHandIndex].score >= 21) {
         if (state.currentHandIndex < state.splitHand.length - 1) {
           // Check if the current hand index is less than the maximum index

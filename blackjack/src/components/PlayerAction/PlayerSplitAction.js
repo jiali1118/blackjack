@@ -12,7 +12,7 @@ function PlayerSplitAction({ state, dispatch, index }) {
   };
   const canIDouble = canDouble();
   const [hitClicked, setHitClicked] = useState(false);
-  const isCurrentHand = state.currentHandIndex === index;
+  const isCurrentHand = state.currentHandIndex === index && state.isPlayerTurn;
   const handleStand = () => {
     if (state.currentHandIndex < state.splitHand.length - 1) {
       // Check if the current hand index is less than the maximum index
@@ -33,10 +33,12 @@ function PlayerSplitAction({ state, dispatch, index }) {
       >
         Hit
       </button>
-      {!hitClicked && canIDouble ? (
+
+      {/* Double button logic  */}
+      {state.splitHand[index].hand.length === 2 ? (
         <button
           onClick={() => {
-            double(state, dispatch); //sets playerturn to false immediately
+            double(state, dispatch, index); //sets playerturn to false immediately
           }}
           disabled={!isCurrentHand}
         >
@@ -44,15 +46,19 @@ function PlayerSplitAction({ state, dispatch, index }) {
         </button>
       ) : null}
 
-      {state.splitHand[index].hand === 2 ? (
-        <button
-          onClick={() => {
-            split(state, dispatch);
-          }}
-        >
-          Split
-        </button>
-      ) : null}
+      {/* {state.splitHand[index].hand.length === 2 &&
+      state.splitHand[index].hand[0].value ===
+        state.splitHand[index].hand[1].value ? (
+        
+      ) : null} */}
+      <button
+        onClick={() => {
+          split(state, dispatch, index);
+        }}
+        disabled={!isCurrentHand}
+      >
+        Split
+      </button>
       {/*Action for Standing*/}
       <button onClick={handleStand} disabled={!isCurrentHand}>
         Stand
