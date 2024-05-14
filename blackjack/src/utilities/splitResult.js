@@ -1,6 +1,7 @@
 const splitResult = (state, dispatch) => {
   console.log("CALCULATING RESULTS");
-  let losingResult = state.playerBalance - state.betAmount;
+  let resultingBalance = state.playerBalance;
+  console.log(resultingBalance);
   setTimeout(() => {}, 500);
 
   // Initialize variables to keep track of overall result
@@ -14,9 +15,11 @@ const splitResult = (state, dispatch) => {
       if (state.dealerScore <= 21) {
         if (hand.score > state.dealerScore) {
           playerWins++;
+          resultingBalance += hand.bet;
           console.log("Player Wins!");
         } else if (hand.score < state.dealerScore) {
           dealerWins++;
+          resultingBalance -= hand.bet;
           console.log("Dealer Wins!");
         } else {
           ties++;
@@ -24,10 +27,12 @@ const splitResult = (state, dispatch) => {
         }
       } else {
         playerWins++;
+        resultingBalance += hand.bet;
         console.log("Player Wins! Dealer Busts!");
       }
     } else if (state.dealerScore <= 21) {
       dealerWins++;
+      resultingBalance -= hand.bet;
       console.log("Dealer Wins! Player Busts!");
     } else {
       ties++;
@@ -35,15 +40,11 @@ const splitResult = (state, dispatch) => {
     }
   });
 
-  // Update player balance based on overall result
-  state.playerBalance +=
-    playerWins * state.betAmount - dealerWins * state.betAmount;
-
   // Dispatch outcome based on overall result
   if (playerWins > dealerWins) {
     dispatch({ type: "OUTCOME", payload: "Player Wins!" });
   } else if (playerWins < dealerWins) {
-    if (losingResult <= 0) {
+    if (resultingBalance <= 0) {
       dispatch({ type: "OUTCOME", payload: "OUT OF FUNDS" });
     } else {
       dispatch({ type: "OUTCOME", payload: "Dealer Wins!" });
@@ -52,6 +53,7 @@ const splitResult = (state, dispatch) => {
     dispatch({ type: "OUTCOME", payload: "Tie!" });
   }
 
+  dispatch({ type: "SET_PLAYER_BALANCE", payload: resultingBalance });
   console.log("END CALCULATE RESULT");
 };
 
