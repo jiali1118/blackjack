@@ -27,8 +27,8 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
-  splitedHand: { hand: [], score: 0 },
   splitHand: [],
+  currentHandIndex: 0,
   calculateSplit: true,
   handIsSplit: false,
   dealerHiddenCard: {},
@@ -107,8 +107,9 @@ const BlackjackGame = () => {
           outCome: "",
           hidden: true,
           dealerHiddenCard: {},
-          splitHand: [[], []],
+          splitHand: [],
           handIsSplit: false,
+          currentHandIndex: 0,
         };
       }
       case "NEW_GAME": {
@@ -136,6 +137,13 @@ const BlackjackGame = () => {
         return {
           ...state,
           splitHand: updatedSplitHand,
+        };
+      }
+      case "INCREMENT_HAND_INDEX": {
+        let index = state.currentHandIndex + 1;
+        return {
+          ...state,
+          currentHandIndex: index,
         };
       }
       default:
@@ -217,19 +225,20 @@ const BlackjackGame = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
-  // useEffect(() => {
-  //   // Calculate scores for each hand in state.splitHand
-  //   console.log("Updating split hand score");
-  //   if (state.calculateSplit) {
-  //     const updatedSplitHand = state.splitHand.map((splitHand) => {
-  //       const score = calculateHand(splitHand.hand);
-  //       return { hand: splitHand.hand, score }; // Return an object with the hand and its calculated score
-  //     });
-  //     console.log(updatedSplitHand);
-  //     dispatch({ type: "CALCULATE_SPLIT", payload: false });
-  //     dispatch({ type: "UPDATE_SPLIT_HAND", payload: updatedSplitHand });
-  //   }
-  // }, [state.splitHand]);
+  useEffect(() => {
+    if (state.handIsSplit) {
+      if (state.splitHand[state.currentHandIndex].score >= 21) {
+        if (state.currentHandIndex < state.splitHand.length - 1) {
+          // Check if the current hand index is less than the maximum index
+          dispatch({ type: "INCREMENT_HAND_INDEX" }); // Dispatch an action to increment the index of the current hand
+        } else {
+          dispatch({ type: "SET_PLAYER_TURN", payload: false });
+          dispatch({ type: "SET_DEALER_TURN", payload: true });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.splitHand]);
 
   return (
     <div>

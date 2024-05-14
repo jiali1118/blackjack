@@ -2,6 +2,7 @@ import React from "react";
 import RenderHand from "./RenderHand"; // Import the RenderHand component
 import PlayerAction from "../PlayerAction/PlayerAction";
 import cardBackImage from "../../images/cardBack.png";
+import PlayerSplitAction from "../PlayerAction/PlayerSplitAction";
 const hidden = {
   code: "hidden",
   image: cardBackImage,
@@ -19,10 +20,14 @@ const RenderSplitHand = ({ playerHands, state, dispatch }) => {
   return playerHands.map((nestedArray, index) => (
     <div key={index}>
       {/* Use the RenderHand component for each nested array */}
-      <PlayerAction state={state} dispatch={dispatch} index={index} />
+      <PlayerSplitAction state={state} dispatch={dispatch} index={index} />
       <RenderHand playerHands={nestedArray.hand} />
       {/* Render the score for the current hand */}
-      <p>Score: {nestedArray.score}</p>
+      {nestedArray.score > 21 ? (
+        <p>Score: BUST!</p>
+      ) : (
+        <p>Score: {nestedArray.score}</p>
+      )}
     </div>
   ));
 };
