@@ -49,43 +49,79 @@ app.get("/users", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const email = req.body.email;
-  const loginPassword = req.body.password;
-  const [rows] = await db.query(
-    "SELECT * FROM blackjack.users WHERE email = ?",
-    [email]
-  );
   try {
+    const email = req.body.email;
+    const loginPassword = req.body.password;
+    const [rows] = await db.query(
+      "SELECT * FROM blackjack.users WHERE email = ?",
+      [email]
+    );
+
     if (rows.length > 0) {
       const user = rows[0];
       const storedHashedPassword = user.password;
-      try {
-        const result = await bcrypt.compare(
-          loginPassword,
-          storedHashedPassword
-        );
-        if (result) {
-          const token = jwt.sign({ id: user.id }, "jwtkey");
-          const { id, email } = user;
-          res.cookie("access_token", token, {
-            httpOnly: true,
-          });
-          res
-            .status(200)
-            .json({ id, email, token, message: "user has logged in" });
-        } else {
-          res.status(401).json({ error: "Incorrect password" });
-        }
-      } catch (bcryptError) {
-        console.error("Error comparing passwords:", bcryptError);
-        res.status(500).send("Error logging in");
+      const result = await bcrypt.compare(loginPassword, storedHashedPassword);
+
+      if (result) {
+        const token = jwt.sign({ id: user.id }, "jwtkey");
+        const { id, email } = user;
+        res.cookie("access_token", token, {
+          httpOnly: true,
+        });
+        res
+          .status(200)
+          .json({ id, email, token, message: "user has logged in" });
+      } else {
+        res.status(401).json({ error: "Incorrect password" });
       }
     } else {
-      res.status(404).json({ error: "User no found" });
+      res.status(404).json({ error: "User not found" });
     }
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).send("Error logging in");
+  }
+});
+
+app.post("/playerbalance", async (req, res) => {
+  const email = req.body.email;
+  const newPlayerBalance = req.body.newPlayerBalance;
+
+  try {
+    // Check if the user exists
+    const [rows] = await db.query(
+      "SELECT * FROM blackjack.users WHERE email = ?",
+      email
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update the player balance
+    await db.query(
+      "UPDATE blackjack.users SET player_balance = ? WHERE email = ?",
+      [newPlayerBalance, email]
+    );
+
+    //Retrieve the current highest balance
+    const [userData] = rows;
+    const currentHighestBalance = userData.highest_balance;
+    let newHighestBalance = currentHighestBalance;
+
+    if (newPlayerBalance > currentHighestBalance) {
+      newHighestBalance = newPlayerBalance;
+    }
+    await db.query(
+      "UPDATE blackjack.users SET player_balance =?, highest_balance =? WHERE email = ?",
+      [newPlayerBalance, newHighestBalance, email]
+    );
+
+    // Return success message
+    res.status(200).json({ message: "Player balance updated successfully" });
+  } catch (error) {
+    console.error("Error updating player balance:", error);
+    res.status(500).json({ error: "Failed to update player balance" });
   }
 });
 
