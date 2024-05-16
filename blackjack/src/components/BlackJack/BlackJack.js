@@ -175,7 +175,7 @@ const BlackjackGame = () => {
     dispatch({ type: "SET_DEALER_SCORE", payload: score });
   }, [state.dealerHand]);
 
-  //Listens for when dealerturn is t rue
+  //Listens for when dealerturn is true
   useEffect(() => {
     if (state.isDealerTurn && state.hidden) {
       dispatch({ type: "REVEAL_HIDDEN_CARD" });

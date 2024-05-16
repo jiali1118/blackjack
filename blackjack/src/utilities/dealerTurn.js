@@ -5,7 +5,7 @@ const dealerTurn = async (state, dispatch) => {
   let score = state.dealerScore;
   if (!isSoft17(state.dealerHand) && score < 17) {
     await hit(state, dispatch);
-    setTimeout(() => {}, 100);
+    setTimeout(() => {}, 500);
   }
   if (state.dealerScore >= 17) {
     dispatch({ type: "SET_DEALER_TURN", payload: false });
