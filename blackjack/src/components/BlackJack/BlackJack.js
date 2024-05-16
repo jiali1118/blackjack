@@ -151,7 +151,7 @@ const BlackjackGame = () => {
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching deck ID: " + err);
     }
   };
 
