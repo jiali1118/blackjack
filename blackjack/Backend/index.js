@@ -25,7 +25,12 @@ const db = mysql.createPool({
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token;
@@ -52,7 +57,7 @@ app.get("/user-info", verifyToken, (req, res) => {
   const email = req.user.email;
   // Return user information
   res.json({ email });
-  console.log("user's email :)",email);
+  console.log("user's email :)", email);
 });
 
 app.get("/", (req, res) => {
