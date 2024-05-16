@@ -119,10 +119,39 @@ const BlackjackGame = () => {
       dispatch({ type: "SET_GAME_STARTED", payload: true });
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
+
+      // //------ ask michael ------//
+      // const newBalance = // calculate new balance based on bet amount//;
+      // await updatePlayerBalance(newBalance);
     } catch (err) {
       console.error(err);
     }
   };
+
+  // Update player balance
+  const updatePlayerBalance = async (newBalance) => {
+    try {
+      const response = await fetch("http://localhost:8800/playerbalance", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test2", //double check with login.js page
+          newPlayerBalance: newBalance,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update player balance");
+      }
+    } catch (error) {
+      console.error("Failed to fetch from backend", error);
+    }
+  };
+
+  useEffect(() => {
+    updatePlayerBalance(state.playerBalance);
+  }, [state.playerBalance]);
 
   //After confirming bet, player round starts
   //when round is started, dealHand, then set phase to player's turn

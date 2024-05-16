@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"
+import "./Login.css";
 
 function Login() {
   const [inputEmail, setInputEmail] = useState("");
@@ -30,11 +30,12 @@ function Login() {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Failed to login. Please try again.");
       }
       const userData = await response.json();
-      if(userData.token) {
-        document.cookie = `access_token=${userData.token}; path=/`;
+      if (userData.token) {
+        console.log("User Data info:", userData);
+        document.cookie = `access_token=${userData.token}; path=/;`;
         navigate("/");
       } else {
         setErrorMessage("Invalid email or password. Please try again");
@@ -50,21 +51,21 @@ function Login() {
   // }
 
   return (
-    <div className ="loginpage">
+    <div className="loginpage">
       <form onSubmit={handleSubmit}>
         <h1> Login </h1>
         <div className="input-container">
-          <label className ="text">Email</label>
+          <label className="text">Email</label>
           <input type="text" value={inputEmail} onChange={handleEmailChange} />
         </div>
         <div className="input-container">
-          <label className ="text">Password</label>
+          <label className="text">Password</label>
           <input
             type="password"
             value={password}
             onChange={handlePasswordChange}
           />
-        <button type="submit">Login</button>
+          <button type="submit">Login</button>
           <p>
             Don't have an account? <a href="/Register">Register</a>
           </p>

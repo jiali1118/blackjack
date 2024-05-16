@@ -27,6 +27,34 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).json({ error: "User not Authenticated" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWTKEY);
+    if (decoded) {
+      req.user = decoded;
+      req.authenticated = true;
+      return next();
+    } else {
+      return res.status(401).json({ error: "Invalid token payload" });
+    }
+  } catch (error) {
+    console.log("Error verifying token:", error);
+    res.status(401).json({ error: error.message });
+  }
+};
+
+app.get("/user-info", verifyToken, (req, res) => {
+  // Access user information from req.user
+  const email = req.user.email;
+  // Return user information
+  res.json({ email });
+  console.log("user's email :)",email);
+});
+
 app.get("/", (req, res) => {
   res.json("you are connected to the backend");
 });
@@ -63,9 +91,16 @@ app.post("/login", async (req, res) => {
       const result = await bcrypt.compare(loginPassword, storedHashedPassword);
 
       if (result) {
-        const token = jwt.sign({ id: user.id }, "jwtkey");
+        const token = jwt.sign(
+          { id: user.id, email: user.email },
+          process.env.JWTKEY
+        );
+        console.log("User ID:", user.id);
+        console.log("EMAIL:", user.email);
+        console.log("Generated token:", token);
         const { id, email } = user;
         res.cookie("access_token", token, {
+          maxAge: 60 * 60 * 24,
           httpOnly: true,
         });
         res
@@ -88,6 +123,8 @@ app.post("/playerbalance", async (req, res) => {
   const newPlayerBalance = req.body.newPlayerBalance;
 
   try {
+    console.log("Email:", email);
+    console.log("New Player Balance:", newPlayerBalance);
     // Check if the user exists
     const [rows] = await db.query(
       "SELECT * FROM blackjack.users WHERE email = ?",
