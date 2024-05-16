@@ -3,15 +3,15 @@ import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 import split from "../../utilities/split";
 function PlayerSplitAction({ state, dispatch, index }) {
-  const canDouble = () => {
-    let doubleBet = state.betAmount + state.betAmount;
-    if (state.playerBalance - doubleBet < 0) {
-      return false;
-    }
-    return true;
-  };
-  const canIDouble = canDouble();
-  const [hitClicked, setHitClicked] = useState(false);
+  // const canDouble = () => {
+  //   let doubleBet = state.betAmount + state.betAmount;
+  //   if (state.playerBalance - doubleBet < 0) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
+  // const canIDouble = canDouble();
+  // const [hitClicked, setHitClicked] = useState(false);
   const isCurrentHand = state.currentHandIndex === index && state.isPlayerTurn;
   const handleStand = () => {
     if (state.currentHandIndex < state.splitHand.length - 1) {
@@ -27,7 +27,7 @@ function PlayerSplitAction({ state, dispatch, index }) {
       <button
         onClick={() => {
           hit(state, dispatch, index);
-          setHitClicked(true);
+          // setHitClicked(true);
         }}
         disabled={!isCurrentHand}
       >

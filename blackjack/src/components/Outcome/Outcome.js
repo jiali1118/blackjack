@@ -8,6 +8,7 @@ const Outcome = ({ state, dispatch }) => {
   };
 
   const startNewRound = () => {
+    console.log("Starting new round");
     dispatch({ type: "NEW_ROUND" });
   };
 

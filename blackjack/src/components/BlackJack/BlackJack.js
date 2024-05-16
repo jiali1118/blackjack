@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, isEqual } from "react";
+import React, { useEffect, useReducer } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
@@ -11,7 +11,7 @@ import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
 import splitResult from "../../utilities/splitResult";
-import split from "../../utilities/split";
+
 const initialState = {
   //Initial game state
   gameStarted: false,
@@ -242,6 +242,7 @@ const BlackjackGame = () => {
         <button onClick={startGame}>Start Game</button>
       ) : null}
       {state.gameStarted ? <Dealer state={state} dispatch={dispatch} /> : null}
+
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
