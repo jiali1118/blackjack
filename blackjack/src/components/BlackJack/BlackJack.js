@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
-import PlayerAction from "../PlayerAction/PlayerAction";
 import dealerTurn from "../../utilities/dealerTurn";
 import newDeck from "../../utilities/newDeck";
 import Player from "../Player/Player";
@@ -217,6 +216,7 @@ const BlackjackGame = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
 
+  //Checks score for each splithand.
   useEffect(() => {
     if (state.handIsSplit) {
       //if busted
@@ -247,9 +247,6 @@ const BlackjackGame = () => {
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
       {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
-      {state.isPlayerTurn && !state.handIsSplit ? (
-        <PlayerAction state={state} dispatch={dispatch} />
-      ) : null}
     </div>
   );
 };

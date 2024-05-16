@@ -2,6 +2,7 @@
 import React from "react";
 import RenderHand from "../RenderHand/RenderHand";
 import RenderSplitHand from "../RenderHand/RenderSplitHand";
+import PlayerAction from "../PlayerAction/PlayerAction";
 const Player = ({ state, dispatch }) => {
   return (
     <div id="playerhand">
@@ -22,7 +23,9 @@ const Player = ({ state, dispatch }) => {
           </p>
         </div>
       ) : null}
-
+      {state.isPlayerTurn && !state.handIsSplit ? (
+        <PlayerAction state={state} dispatch={dispatch} />
+      ) : null}
       {!state.handIsSplit ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <RenderHand playerHands={state.playerHands} />
