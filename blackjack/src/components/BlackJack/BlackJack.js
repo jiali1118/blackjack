@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
-import PlayerAction from "../PlayerAction/PlayerAction";
 import dealerTurn from "../../utilities/dealerTurn";
 import newDeck from "../../utilities/newDeck";
 import Player from "../Player/Player";
@@ -10,6 +9,8 @@ import Dealer from "../Dealer/Dealer";
 import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
+import splitResult from "../../utilities/splitResult";
+
 const initialState = {
   //Initial game state
   gameStarted: false,
@@ -27,6 +28,10 @@ const initialState = {
   playerBalance: 1000,
   playerHands: [],
   dealerHand: [],
+  splitHand: [],
+  currentHandIndex: 0,
+  calculateSplit: true,
+  handIsSplit: false,
   dealerHiddenCard: {},
   hiddenCard: {
     code: "hidden",
@@ -82,9 +87,12 @@ const BlackjackGame = () => {
           dealerHiddenCard: action.payload,
         };
       case "REVEAL_HIDDEN_CARD":
+        const newDealerHand = [...state.dealerHand];
+        newDealerHand.pop();
+        newDealerHand.push(state.dealerHiddenCard);
         return {
           ...state,
-          dealerHand: [state.dealerHiddenCard, ...state.dealerHand.slice(1)],
+          dealerHand: newDealerHand,
           hidden: false,
         };
       case "NEW_ROUND": {
@@ -100,10 +108,32 @@ const BlackjackGame = () => {
           outCome: "",
           hidden: true,
           dealerHiddenCard: {},
+          splitHand: [],
+          handIsSplit: false,
+          currentHandIndex: 0,
         };
       }
       case "NEW_GAME": {
         return initialState;
+      }
+      case "SET_SPLIT_HAND": {
+        return { ...state, handIsSplit: action.payload };
+      }
+      case "UPDATE_SPLIT_HAND": {
+        return { ...state, splitHand: action.payload };
+      }
+      case "CALCULATE_SPLIT": {
+        const updatedSplitHand = state.splitHand.map((splitHand) => {
+          const score = calculateHand(splitHand.hand);
+          return { ...splitHand, score }; // Spread the existing properties and include the updated score
+        });
+
+        // Return the updated state with the calculated split hand scores
+        return { ...state, splitHand: updatedSplitHand };
+      }
+      case "INCREMENT_HAND_INDEX": {
+        let index = state.currentHandIndex + 1;
+        return { ...state, currentHandIndex: index };
       }
       default:
         return state;
@@ -124,7 +154,7 @@ const BlackjackGame = () => {
       // const newBalance = // calculate new balance based on bet amount//;
       // await updatePlayerBalance(newBalance);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching deck ID: " + err);
     }
   };
 
@@ -174,7 +204,7 @@ const BlackjackGame = () => {
     dispatch({ type: "SET_DEALER_SCORE", payload: score });
   }, [state.dealerHand]);
 
-  //Listens for when dealerturn is t rue
+  //Listens for when dealerturn is true
   useEffect(() => {
     if (state.isDealerTurn && state.hidden) {
       dispatch({ type: "REVEAL_HIDDEN_CARD" });
@@ -207,11 +237,30 @@ const BlackjackGame = () => {
 
   //Listens for when round is over, calculate results.
   useEffect(() => {
-    if (state.roundEnded) {
+    if (state.roundEnded && !state.handIsSplit) {
       result(state, dispatch);
+    } else if (state.roundEnded && state.handIsSplit) {
+      splitResult(state, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.roundEnded]);
+
+  //Checks score for each splithand.
+  useEffect(() => {
+    if (state.handIsSplit) {
+      //if busted
+      if (state.splitHand[state.currentHandIndex].score >= 21) {
+        if (state.currentHandIndex < state.splitHand.length - 1) {
+          // Check if the current hand index is less than the maximum index
+          dispatch({ type: "INCREMENT_HAND_INDEX" }); // Dispatch an action to increment the index of the current hand
+        } else {
+          dispatch({ type: "SET_PLAYER_TURN", payload: false });
+          dispatch({ type: "SET_DEALER_TURN", payload: true });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.splitHand]);
 
   return (
     <div>
@@ -222,13 +271,11 @@ const BlackjackGame = () => {
         <button onClick={startGame}>Start Game</button>
       ) : null}
       {state.gameStarted ? <Dealer state={state} dispatch={dispatch} /> : null}
+
       {state.betStarted ? (
         <BetAmount state={state} dispatch={dispatch} />
       ) : null}
       {state.gameStarted ? <Player state={state} dispatch={dispatch} /> : null}
-      {state.isPlayerTurn ? (
-        <PlayerAction state={state} dispatch={dispatch} />
-      ) : null}
     </div>
   );
 };

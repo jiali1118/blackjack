@@ -21,7 +21,7 @@ function calculateHand(hand) {
   if (hasAce && total + 10 <= 21) {
     total += 10;
   }
-  console.log(total);
+  //console.log(total);
   return total;
 }
 
