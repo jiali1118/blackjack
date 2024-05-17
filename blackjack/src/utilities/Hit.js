@@ -1,4 +1,4 @@
-import fetchCard from "../utilities/fetchCard";
+import fetchCard from "./fetchCard";
 
 const hit = async (state, dispatch, index) => {
   try {
