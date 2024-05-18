@@ -1,3 +1,4 @@
+import "./Dealer.css";
 // Dealer.js
 import React from "react";
 import RenderHand from "../RenderHand/RenderHand";

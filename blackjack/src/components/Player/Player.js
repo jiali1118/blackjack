@@ -3,6 +3,7 @@ import React from "react";
 import RenderHand from "../RenderHand/RenderHand";
 import RenderSplitHand from "../RenderHand/RenderSplitHand";
 import PlayerAction from "../PlayerAction/PlayerAction";
+import "./Player.css";
 const Player = ({ state, dispatch }) => {
   return (
     <div id="playerhand">
