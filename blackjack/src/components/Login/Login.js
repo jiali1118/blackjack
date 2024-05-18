@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import Header from "../Header/header";
 
 function Login() {
   const [inputEmail, setInputEmail] = useState("");
@@ -51,27 +52,34 @@ function Login() {
   // }
 
   return (
-    <div className="loginpage">
-      <form onSubmit={handleSubmit}>
-        <h1> Login </h1>
-        <div className="input-container">
-          <label className="text">Email</label>
-          <input type="text" value={inputEmail} onChange={handleEmailChange} />
-        </div>
-        <div className="input-container">
-          <label className="text">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <button type="submit">Login</button>
-          <p>
-            Don't have an account? <a href="/Register">Register</a>
-          </p>
-        </div>
-      </form>
-      {errorMessage && <p>{errorMessage}</p>}
+    <div>
+      <Header/>
+      <div className="loginpage">
+        <form onSubmit={handleSubmit}>
+          <h1> Login </h1>
+          <div className="input-container">
+            <label className="text">Email</label>
+            <input
+              type="text"
+              value={inputEmail}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <div className="input-container">
+            <label className="text">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <button type="submit">Login</button>
+            <p>
+              Don't have an account? <a href="/Register">Register</a>
+            </p>
+          </div>
+        </form>
+        {errorMessage && <p>{errorMessage}</p>}
+      </div>
     </div>
   );
 }

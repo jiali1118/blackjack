@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./header.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Header() {
   const [email, setEmail] = useState("");
-  const [isLoggedIn, setIsLoggedin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -17,9 +18,9 @@ function Header() {
         if (response.ok) {
           const userData = await response.json();
           setEmail(userData.email);
-          setIsLoggedin(true);
+          setIsLoggedIn(true);
         } else {
-          setIsLoggedin(false);
+          setIsLoggedIn(false);
         }
       } catch (error) {
         console.error("Issue getting user info:", error);
@@ -28,27 +29,40 @@ function Header() {
     fetchUserInfo();
   }, []);
 
+  const handleHomeClick = () => {
+    navigate("/");
+  };
+
   const handleSignOut = () => {
     document.cookie =
       "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setIsLoggedIn(false); // Update login state to false after signing out
     navigate("/login");
   };
 
+  const isLoginPage = location.pathname === "/login";
+
   return (
-    <div className="container">
-      <h1>Black Jack</h1>
+    <div className="navbar">
+      <h2 className="home-link" onClick={handleHomeClick}>
+        Black Jack
+      </h2>
       <div className="register">
         {isLoggedIn ? (
           <>
-            <h3> {email} </h3>
-            <button onClick={handleSignOut}>Sign Out</button>
+            <div className="nav-item"> {email} </div>
+            <div className="nav-item" onClick={handleSignOut}>
+              Sign Out
+            </div>
           </>
         ) : (
           <>
-          <h3>Guest</h3>
-          <a href="../Login">
-            <h3>Sign in</h3>
-          </a>
+            {!isLoginPage && <div className="nav-text">Guest</div>}
+            {!isLoginPage && (
+              <a href="../login" className="nav-item">
+                Sign in
+              </a>
+            )}
           </>
         )}
       </div>
