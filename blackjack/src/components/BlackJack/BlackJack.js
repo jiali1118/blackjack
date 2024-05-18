@@ -10,6 +10,7 @@ import result from "../../utilities/result";
 import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
 import splitResult from "../../utilities/splitResult";
+import "./BlackJack.css";
 
 const initialState = {
   //Initial game state
@@ -263,7 +264,7 @@ const BlackjackGame = () => {
   }, [state.splitHand]);
 
   return (
-    <div>
+    <div className="board">
       {state.outCome !== "" ? (
         <Outcome state={state} dispatch={dispatch} />
       ) : null}
