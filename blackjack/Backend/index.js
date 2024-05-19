@@ -52,6 +52,24 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+app.get("/leaderboard", async (req, res) => {
+  const highestScore =
+    "SELECT id, email, highest_balance FROM blackjack.users ORDER BY highest_balance DESC LIMIT 10";
+  try {
+    const [users] = await db.query(highestScore);
+    const userData = users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      highest_balance: user.highest_balance,
+    }));
+    console.log("users highest scores data:", userData);
+    res.json(userData);
+  } catch (error) {
+    console.error("Couldn't get high scores", error);
+    res.status(500).json({ error: "failed to fetch users highest balance" });
+  }
+});
+
 app.get("/user-info", verifyToken, (req, res) => {
   // Access user information from req.user
   const email = req.user.email;
