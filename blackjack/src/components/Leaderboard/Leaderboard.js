@@ -7,7 +7,7 @@ const Leaderboard = ({users}) => {
   <ol>
     {users.map((user) =>(
       <li key={user.id}>
-       {user.email} : {user.highest_balance}
+       {user.email} : ${user.highest_balance}
       </li>
     ))}
   </ol>
