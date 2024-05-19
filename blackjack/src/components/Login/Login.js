@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import "./login.css";
 import Header from "../Header/header";
 
 function Login() {
@@ -53,7 +53,7 @@ function Login() {
 
   return (
     <div>
-      <Header/>
+      <Header />
       <div className="loginpage">
         <form onSubmit={handleSubmit}>
           <h1> Login </h1>

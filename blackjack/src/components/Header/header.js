@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./header.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import LeaderboardModal from "../Leaderboard/LeaderboardModal";
 
 function Header() {
   const [email, setEmail] = useState("");
@@ -42,12 +44,24 @@ function Header() {
 
   const isLoginPage = location.pathname === "/login";
 
+  //Leaderboard logic
+  const [showModal, setShowModal] = useState(false);
+  const handleShow = () => {
+    setShowModal(true);
+    console.log("Modal clicked");
+  };
+  const handleClose = () => setShowModal(false);
+
   return (
     <div className="navbar">
       <h2 className="home-link" onClick={handleHomeClick}>
         Black Jack
       </h2>
       <div className="register">
+        <Button variant="primary" onClick={handleShow}>
+          Leaderboard
+        </Button>
+        <LeaderboardModal show={showModal} handleClose={handleClose} />
         {isLoggedIn ? (
           <>
             <div className="nav-item"> {email} </div>
