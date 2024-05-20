@@ -41,7 +41,7 @@ const initialState = {
     suit: "NONE",
   },
 };
-const BlackjackGame = () => {
+const BlackjackGame = (props) => {
   const reducer = (state, action) => {
     switch (action.type) {
       case "SET_DECK_ID":
@@ -162,13 +162,19 @@ const BlackjackGame = () => {
   // Update player balance
   const updatePlayerBalance = async (newBalance) => {
     try {
+      let currUser;
+      if (props.user !== "") {
+        currUser = props.user;
+      } else {
+        throw new Error("FAILED TO RETRIEVE USER DATA");
+      }
       const response = await fetch("http://localhost:8800/playerbalance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "test2", //double check with login.js page
+          email: currUser, //double check with login.js page
           newPlayerBalance: newBalance,
         }),
       });

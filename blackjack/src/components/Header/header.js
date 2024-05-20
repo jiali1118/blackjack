@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import LeaderboardModal from "../Leaderboard/LeaderboardModal";
 
-function Header() {
+function Header(prop) {
   const [email, setEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ function Header() {
         if (response.ok) {
           const userData = await response.json();
           setEmail(userData.email);
+          prop.setUser(userData.email);
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
