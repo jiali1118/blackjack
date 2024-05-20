@@ -12,18 +12,22 @@
     align-items: center;
 }
 
-.modal {
-    background-color: rgba(255, 255, 255, 0);
+.modall {
+    background-color: rgba(255, 255, 255, 0) !important;
     /* 0.5 represents 50% transparency */
     padding: 20px;
     border-radius: 5px;
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
     /* add shadow for depth */
+    z-index: 10;
+    display: block !important;
 }
 
 .outcome-text {
     color: white;
-    font-size: 96px;
+    text-shadow: 2px 2px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 72px;
 }
 
 /* Additional styling as needed */
