@@ -4,6 +4,7 @@ import Header from "../Header/header";
 
 function Home() {
   const [user, setUser] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <div className="App">
       <Header setUser={setUser} />

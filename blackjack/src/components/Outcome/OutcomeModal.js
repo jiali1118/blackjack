@@ -12,7 +12,7 @@ const OutcomeModal = ({ outcome, onEndGame, onStartNewRound }) => {
               End Game
             </Button>
             {outcome !== "OUT OF FUNDS" ? (
-              <Button variant="success" onClick={onEndGame}>
+              <Button variant="success" onClick={onStartNewRound}>
                 New Round
               </Button>
             ) : null}

@@ -275,7 +275,9 @@ const BlackjackGame = (props) => {
         <Outcome state={state} dispatch={dispatch} />
       ) : null}
       {!state.gameStarted ? (
-        <button onClick={startGame}>Start Game</button>
+        <button className="button1" onClick={startGame}>
+          Start Game
+        </button>
       ) : null}
       {state.gameStarted ? <Dealer state={state} dispatch={dispatch} /> : null}
 
