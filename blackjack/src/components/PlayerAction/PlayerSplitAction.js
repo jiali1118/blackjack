@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 import split from "../../utilities/split";
+import { Button } from "react-bootstrap";
+
 function PlayerSplitAction({ state, dispatch, index }) {
-  // const canDouble = () => {
-  //   let doubleBet = state.betAmount + state.betAmount;
-  //   if (state.playerBalance - doubleBet < 0) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
-  // const canIDouble = canDouble();
-  // const [hitClicked, setHitClicked] = useState(false);
+  //Boolean to keep track of hand actions.
   const isCurrentHand = state.currentHandIndex === index && state.isPlayerTurn;
+
+  //Function to handle when stand action based on which hand the index is on.
   const handleStand = () => {
     if (state.currentHandIndex < state.splitHand.length - 1) {
       // Check if the current hand index is less than the maximum index
@@ -22,47 +18,50 @@ function PlayerSplitAction({ state, dispatch, index }) {
       dispatch({ type: "SET_DEALER_TURN", payload: true });
     }
   };
+
   return (
     <div>
-      <button
+      <Button
+        variant="dark"
         onClick={() => {
           hit(state, dispatch, index);
-          // setHitClicked(true);
         }}
         disabled={!isCurrentHand}
       >
         Hit
-      </button>
+      </Button>
 
       {/* Double button logic  */}
       {state.splitHand[index].hand.length === 2 ? (
-        <button
+        <Button
+          variant="dark"
           onClick={() => {
             double(state, dispatch, index); //sets playerturn to false immediately
           }}
           disabled={!isCurrentHand}
         >
           Double
-        </button>
+        </Button>
       ) : null}
 
       {state.splitHand[index].hand.length === 2 &&
       state.splitHand[index].hand[0].value ===
         state.splitHand[index].hand[1].value ? (
-        <button
+        <Button
+          variant="dark"
           onClick={() => {
             split(state, dispatch, index);
           }}
           disabled={!isCurrentHand}
         >
           Split
-        </button>
+        </Button>
       ) : null}
 
       {/*Action for Standing*/}
-      <button onClick={handleStand} disabled={!isCurrentHand}>
+      <Button variant="dark" onClick={handleStand} disabled={!isCurrentHand}>
         Stand
-      </button>
+      </Button>
     </div>
   );
 }
