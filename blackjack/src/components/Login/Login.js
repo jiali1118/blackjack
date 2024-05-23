@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
+import "./Login.css";
 import Header from "../Header/header";
 import { Button } from "react-bootstrap";
 
-function Login() {
+function Login({setUser, setIsLoggedIn}) {
   const [inputEmail, setInputEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -38,6 +38,8 @@ function Login() {
       if (userData.token) {
         console.log("User Data info:", userData);
         document.cookie = `access_token=${userData.token}; path=/;`;
+        setUser(userData)
+        setIsLoggedIn(true)
         navigate("/");
       } else {
         setErrorMessage("Invalid email or password. Please try again");
@@ -47,14 +49,12 @@ function Login() {
       setErrorMessage("Failed to login. Try to register");
     }
   };
-
   // if(isLoggedIn) {
   //   return <Redirect to="/"/>
   // }
 
   return (
     <div>
-      <Header />
       <div className="loginpage">
         <form onSubmit={handleSubmit}>
           <h1> Login </h1>

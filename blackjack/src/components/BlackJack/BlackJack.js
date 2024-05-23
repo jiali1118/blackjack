@@ -41,7 +41,7 @@ const initialState = {
     suit: "NONE",
   },
 };
-const BlackjackGame = (props) => {
+const BlackjackGame = ({user}) => {
   const reducer = (state, action) => {
     switch (action.type) {
       case "SET_DECK_ID":
@@ -163,8 +163,8 @@ const BlackjackGame = (props) => {
   const updatePlayerBalance = async (newBalance) => {
     try {
       let currUser;
-      if (props.user !== "") {
-        currUser = props.user;
+      if (user !== "") {
+        currUser = user.email;
       } else {
         throw new Error("FAILED TO RETRIEVE USER DATA");
       }
