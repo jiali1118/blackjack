@@ -115,20 +115,20 @@ app.post("/login", async (req, res) => {
 
       if (result) {
         const token = jwt.sign(
-          { id: user.id, email: user.email },
+          { id: user.id, email: user.email,  },
           process.env.JWTKEY
         );
         console.log("User ID:", user.id);
         console.log("EMAIL:", user.email);
         console.log("Generated token:", token);
-        const { id, email } = user;
+        const { id, email, player_balance, highest_balance } = user;
         res.cookie("access_token", token, {
           maxAge: 60 * 60 * 24,
           httpOnly: true,
         });
         res
           .status(200)
-          .json({ id, email, token, message: "user has logged in" });
+          .json({ id, email, player_balance, highest_balance, token, message: "user has logged in" });
       } else {
         res.status(401).json({ error: "Incorrect password" });
       }

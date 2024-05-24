@@ -151,6 +151,9 @@ const BlackjackGame = ({ user }) => {
       dispatch({ type: "SET_GAME_STARTED", payload: true });
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
+      if (user) {
+        showModal();
+      }
       //Richard's work starts here
       //if deteched via cookie or isLogginIn
       //call function showModal();
@@ -190,7 +193,10 @@ const BlackjackGame = ({ user }) => {
   useEffect(() => {
     //Update this richie
     //Add if statement to check if user is logged in, so this doesn't get called for non-users
-    updatePlayerBalance(state.playerBalance);
+    if(user && state.roundEnded) {
+      updatePlayerBalance(state.playerBalance);
+    };
+
   }, [state.playerBalance]);
 
   //After confirming bet, player round starts
@@ -285,6 +291,7 @@ const BlackjackGame = ({ user }) => {
     <div className="board">
       {loadDataModal && state.gameStarted ? (
         <LoadUserBalance
+          user={user}
           state={state}
           dispatch={dispatch}
           onClose={closeModal}
