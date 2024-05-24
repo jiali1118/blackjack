@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import BetAmount from "../BetAmount/BetAmount";
 import dealHand from "../DealHand/DealHand";
 import calculateHand from "../../utilities/calculateHand";
@@ -11,6 +11,7 @@ import Outcome from "../Outcome/Outcome";
 import cardBackImage from "../../images/cardBack.png";
 import splitResult from "../../utilities/splitResult";
 import "./BlackJack.css";
+import LoadUserBalance from "../LoadUserBalance/LoadUserBalance";
 
 const initialState = {
   //Initial game state
@@ -41,7 +42,7 @@ const initialState = {
     suit: "NONE",
   },
 };
-const BlackjackGame = ({user}) => {
+const BlackjackGame = ({ user }) => {
   const reducer = (state, action) => {
     switch (action.type) {
       case "SET_DECK_ID":
@@ -150,10 +151,10 @@ const BlackjackGame = ({user}) => {
       dispatch({ type: "SET_GAME_STARTED", payload: true });
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
-
-      // //------ ask michael ------//
-      // const newBalance = // calculate new balance based on bet amount//;
-      // await updatePlayerBalance(newBalance);
+      //Richard's work starts here
+      //if deteched via cookie or isLogginIn
+      //call function showModal();
+      //else continue as normal
     } catch (err) {
       console.error("Error fetching deck ID: " + err);
     }
@@ -187,6 +188,8 @@ const BlackjackGame = ({user}) => {
   };
 
   useEffect(() => {
+    //Update this richie
+    //Add if statement to check if user is logged in, so this doesn't get called for non-users
     updatePlayerBalance(state.playerBalance);
   }, [state.playerBalance]);
 
@@ -232,12 +235,16 @@ const BlackjackGame = ({user}) => {
       state.playerScore > 21 ||
       (state.playerHands.length === 2 && state.playerScore === 21)
     ) {
-      dispatch({ type: "SET_PLAYER_TURN", payload: false });
-      dispatch({ type: "SET_ROUND_ENDED", payload: true });
+      setTimeout(() => {
+        dispatch({ type: "SET_PLAYER_TURN", payload: false });
+        dispatch({ type: "SET_ROUND_ENDED", payload: true });
+      }, 500);
     } else if (state.playerScore === 21) {
       //if player hits and lands 21, start dealer turn immediately
-      dispatch({ type: "SET_PLAYER_TURN", payload: false });
-      dispatch({ type: "SET_DEALER_TURN", payload: true });
+      setTimeout(() => {
+        dispatch({ type: "SET_PLAYER_TURN", payload: false });
+        dispatch({ type: "SET_DEALER_TURN", payload: true });
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.playerScore]);
@@ -269,8 +276,21 @@ const BlackjackGame = ({user}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.splitHand]);
 
+  //Load returning user balance?
+  const [loadDataModal, setLoadDataModal] = useState(true);
+  const showModal = () => setLoadDataModal(true);
+  const closeModal = () => setLoadDataModal(false);
+
   return (
     <div className="board">
+      {loadDataModal && state.gameStarted ? (
+        <LoadUserBalance
+          state={state}
+          dispatch={dispatch}
+          onClose={closeModal}
+        />
+      ) : null}
+
       {state.outCome !== "" ? (
         <Outcome state={state} dispatch={dispatch} />
       ) : null}
