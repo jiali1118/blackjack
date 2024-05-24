@@ -226,14 +226,14 @@ const BlackjackGame = ({ user }) => {
 
   //Listens for when dealerturn is true
   useEffect(() => {
-    if (state.isDealerTurn && state.hidden) {
-      dispatch({ type: "REVEAL_HIDDEN_CARD" });
-    }
     if (state.isDealerTurn && !state.hidden) {
       console.log("ITS DEALERS TURN");
       setTimeout(() => {
         dealerTurn(state, dispatch);
       }, 2000);
+    }
+    if (state.isDealerTurn && state.hidden) {
+      dispatch({ type: "REVEAL_HIDDEN_CARD" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.isDealerTurn, state.dealerScore]);
@@ -248,13 +248,13 @@ const BlackjackGame = ({ user }) => {
       setTimeout(() => {
         dispatch({ type: "SET_PLAYER_TURN", payload: false });
         dispatch({ type: "SET_ROUND_ENDED", payload: true });
-      }, 500);
+      }, 1000);
     } else if (state.playerScore === 21) {
       //if player hits and lands 21, start dealer turn immediately
       setTimeout(() => {
         dispatch({ type: "SET_PLAYER_TURN", payload: false });
         dispatch({ type: "SET_DEALER_TURN", payload: true });
-      }, 500);
+      }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.playerScore]);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import hit from "../../utilities/hit";
 import double from "../../utilities/double";
 import split from "../../utilities/split";
@@ -7,7 +7,7 @@ import { Button } from "react-bootstrap";
 function PlayerSplitAction({ state, dispatch, index }) {
   //Boolean to keep track of hand actions.
   const isCurrentHand = state.currentHandIndex === index && state.isPlayerTurn;
-
+  const canDouble = state.playerBalance - state.betAmount * 2 > 0;
   //Function to handle when stand action based on which hand the index is on.
   const handleStand = () => {
     if (state.currentHandIndex < state.splitHand.length - 1) {
