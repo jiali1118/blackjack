@@ -3,6 +3,9 @@ import { Button } from "react-bootstrap";
 import "./LoadUserBalance.css";
 
 const LoadUserBalance = ({ user, state, dispatch, onClose }) => {
+  if(!user) {
+    return null;
+  }
   const newBalance = () => {
     dispatch({ type: "SET_PLAYER_BALANCE", payload: 1000 });
     onClose();

@@ -144,6 +144,7 @@ const BlackjackGame = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   //Function to startGame
+
   const startGame = async () => {
     try {
       console.log("Starting game");
@@ -151,8 +152,12 @@ const BlackjackGame = ({ user }) => {
       dispatch({ type: "SET_GAME_STARTED", payload: true });
       dispatch({ type: "SET_DECK_ID", payload: newDeckID });
       dispatch({ type: "BET_PHASE", payload: true });
-      if (user) {
-        showModal();
+      if (user && !playerBalanceLoaded) {
+        console.log(user.player_balance);
+        if (user.player_balance >= 1000) {
+          showModal();
+          setPlayerBalanceLoaded(true);
+        }
       }
       //Richard's work starts here
       //if deteched via cookie or isLogginIn
@@ -193,10 +198,9 @@ const BlackjackGame = ({ user }) => {
   useEffect(() => {
     //Update this richie
     //Add if statement to check if user is logged in, so this doesn't get called for non-users
-    if(user && state.roundEnded) {
+    if (user && state.roundEnded) {
       updatePlayerBalance(state.playerBalance);
-    };
-
+    }
   }, [state.playerBalance]);
 
   //After confirming bet, player round starts
@@ -283,9 +287,10 @@ const BlackjackGame = ({ user }) => {
   }, [state.splitHand]);
 
   //Load returning user balance?
-  const [loadDataModal, setLoadDataModal] = useState(true);
+  const [loadDataModal, setLoadDataModal] = useState(false);
   const showModal = () => setLoadDataModal(true);
   const closeModal = () => setLoadDataModal(false);
+  const [playerBalanceLoaded, setPlayerBalanceLoaded] = useState(false);
 
   return (
     <div className="board">
