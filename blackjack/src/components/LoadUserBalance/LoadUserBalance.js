@@ -21,7 +21,7 @@ const LoadUserBalance = ({ state, dispatch, onClose }) => {
             <Button variant="danger" onClick={newBalance}>
               Start New Game
             </Button>
-
+            <button className="loadb"></button>
             <Button variant="success" onClick={loadData}>
               Resume
             </Button>

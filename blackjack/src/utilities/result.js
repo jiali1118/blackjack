@@ -5,12 +5,19 @@ const result = (state, dispatch) => {
   if (state.playerScore <= 21) {
     if (state.dealerScore <= 21) {
       if (state.playerScore > state.dealerScore) {
-        state.playerBalance += state.betAmount;
+        //Player Wins
+        dispatch({
+          type: "SET_PLAYER_BALANCE",
+          payload: state.playerBalance + state.betAmount,
+        });
         dispatch({ type: "OUTCOME", payload: "Player Wins!" });
         console.log("Player Wins!");
       } else if (state.playerScore < state.dealerScore) {
         //Dealer wins
-        state.playerBalance -= state.betAmount;
+        dispatch({
+          type: "SET_PLAYER_BALANCE",
+          payload: state.playerBalance - state.betAmount,
+        });
         if (losingResult === 0) {
           dispatch({ type: "OUTCOME", payload: "OUT OF FUNDS" });
         } else {
@@ -22,12 +29,20 @@ const result = (state, dispatch) => {
         console.log("Tie!");
       }
     } else {
-      state.playerBalance += state.betAmount;
+      //Player wins, dealer bust
+      dispatch({
+        type: "SET_PLAYER_BALANCE",
+        payload: state.playerBalance + state.betAmount,
+      });
       dispatch({ type: "OUTCOME", payload: "Player Wins! Dealer Busts!" });
       console.log("Player Wins! Dealer Busts!");
     }
   } else if (state.dealerScore <= 21) {
-    state.playerBalance -= state.betAmount;
+    //Dealer wins, player score is lower
+    dispatch({
+      type: "SET_PLAYER_BALANCE",
+      payload: state.playerBalance - state.betAmount,
+    });
     if (losingResult === 0) {
       dispatch({ type: "OUTCOME", payload: "OUT OF FUNDS" });
     } else {
@@ -35,6 +50,7 @@ const result = (state, dispatch) => {
       console.log("Dealer Wins! Player Busts!");
     }
   } else {
+    //TIE
     dispatch({ type: "OUTCOME", payload: "Tie! Both Bust!" });
     console.log("Tie! Both Bust!");
   }
