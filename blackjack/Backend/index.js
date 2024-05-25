@@ -52,6 +52,10 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+app.get("/valid-token", verifyToken, (req, res) => {
+  res.status(200).json(req.user);
+});
+
 app.get("/leaderboard", async (req, res) => {
   const highestScore =
     "SELECT id, email, highest_balance FROM blackjack.users ORDER BY highest_balance DESC LIMIT 10";
@@ -68,14 +72,6 @@ app.get("/leaderboard", async (req, res) => {
     console.error("Couldn't get high scores", error);
     res.status(500).json({ error: "failed to fetch users highest balance" });
   }
-});
-
-app.get("/user-info", verifyToken, (req, res) => {
-  // Access user information from req.user
-  const email = req.user.email;
-  // Return user information
-  res.json({ email });
-  console.log("user's email :)", email);
 });
 
 app.get("/", (req, res) => {
@@ -115,7 +111,7 @@ app.post("/login", async (req, res) => {
 
       if (result) {
         const token = jwt.sign(
-          { id: user.id, email: user.email,  },
+          { id: user.id, email: user.email },
           process.env.JWTKEY
         );
         console.log("User ID:", user.id);
@@ -126,9 +122,14 @@ app.post("/login", async (req, res) => {
           maxAge: 60 * 60 * 24,
           httpOnly: true,
         });
-        res
-          .status(200)
-          .json({ id, email, player_balance, highest_balance, token, message: "user has logged in" });
+        res.status(200).json({
+          id,
+          email,
+          player_balance,
+          highest_balance,
+          token,
+          message: "user has logged in",
+        });
       } else {
         res.status(401).json({ error: "Incorrect password" });
       }
