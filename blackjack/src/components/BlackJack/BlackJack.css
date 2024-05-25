@@ -29,12 +29,12 @@
     text-transform: uppercase;
     letter-spacing: 1.3px;
     font-weight: 700;
-    color: #313133;
-    background: #FF4500;
-    background: linear-gradient(90deg, rgba(255, 99, 71, 1) 0%, rgba(255, 69, 0, 1) 100%);
+    color: white;
+    background: black;
+    background: linear-gradient(90deg, rgba(0, 4, 30, 1) 0%, rgba(0, 0, 0, 1) 100%);
     border: none;
     border-radius: 1000px;
-    box-shadow: 12px 12px 24px rgba(255, 69, 0, 0.64);
+    box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.64);
     transition: all 0.3s ease-in-out 0s;
     cursor: pointer;
     outline: none;
@@ -48,8 +48,8 @@
     border-radius: 1000px;
     min-width: calc(300px + 12px);
     min-height: calc(60px + 12px);
-    border: 6px solid #FF4500;
-    box-shadow: 0 0 60px rgba(255, 99, 71, 0.64);
+    border: 6px solid white;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.64);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -74,7 +74,7 @@
     width: 30px;
     height: 30px;
     border-radius: 100%;
-    border: 6px solid #FF4500;
+    border: 6px solid white;
     position: absolute;
     z-index: -1;
     top: 50%;
@@ -85,8 +85,8 @@
 
 .button1:hover::after,
 .button1:focus::after {
-    animation: none;
-    display: none;
+    /* animation: none; */
+    /* display: none; */
 }
 
 @keyframes ring {

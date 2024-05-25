@@ -5,14 +5,7 @@ import split from "../../utilities/split";
 import { Button } from "react-bootstrap";
 
 function PlayerAction({ state, dispatch, index }) {
-  const canDouble = () => {
-    let doubleBet = state.betAmount * 2;
-    if (state.playerBalance - doubleBet < 0) {
-      return false;
-    }
-    return true;
-  };
-  const canIDouble = canDouble();
+  const canIDouble = state.playerBalance - state.betAmount * 2 >= 0;
   const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
@@ -41,7 +34,8 @@ function PlayerAction({ state, dispatch, index }) {
 
       {/*Action for Splitting hand*/}
       {state.playerHands.length >= 2 &&
-      state.playerHands[0].value === state.playerHands[1].value ? (
+      state.playerHands[0].value === state.playerHands[1].value &&
+      canIDouble ? (
         <Button
           variant="dark"
           onClick={() => {
