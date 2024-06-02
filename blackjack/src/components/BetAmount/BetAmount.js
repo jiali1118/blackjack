@@ -27,8 +27,8 @@ const BetAmount = ({ state, dispatch }) => {
   return (
     <div>
       <div className="bet-display">
-        <p style={{ padding: "0 10px" }}>Total Bet Amount: ${totalBetAmount}</p>
-        <p>Player Balance: ${state.playerBalance}</p>
+        <p className="text" style={{ padding: "0 10px" }}>Total Bet Amount: ${totalBetAmount}</p>
+        <p className="text">Player Balance: ${state.playerBalance}</p>
       </div>
 
       <div>
