@@ -159,10 +159,6 @@ const BlackjackGame = ({ user }) => {
           setPlayerBalanceLoaded(true);
         }
       }
-      //Richard's work starts here
-      //if deteched via cookie or isLogginIn
-      //call function showModal();
-      //else continue as normal
     } catch (err) {
       console.error("Error fetching deck ID: " + err);
     }

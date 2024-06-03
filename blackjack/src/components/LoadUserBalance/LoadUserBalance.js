@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import "./LoadUserBalance.css";
 
 const LoadUserBalance = ({ user, state, dispatch, onClose }) => {
-  if(!user) {
+  if (!user) {
     return null;
   }
   const newBalance = () => {
@@ -14,7 +14,7 @@ const LoadUserBalance = ({ user, state, dispatch, onClose }) => {
     dispatch({ type: "SET_PLAYER_BALANCE", payload: user.player_balance });
     onClose();
   };
-  console.log("user balance?:", user)
+  console.log("user balance?:", user);
   return (
     <div className="modal-overlay">
       <div className="modall2">
@@ -25,7 +25,6 @@ const LoadUserBalance = ({ user, state, dispatch, onClose }) => {
             <Button variant="danger" onClick={newBalance}>
               Start New Game
             </Button>
-            <button className="loadb"></button>
             <Button variant="success" onClick={loadData}>
               Resume
             </Button>
