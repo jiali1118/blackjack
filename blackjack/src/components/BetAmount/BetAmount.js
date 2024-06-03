@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import "./BetAmount.css";
 const BetAmount = ({ state, dispatch }) => {
   const [totalBetAmount, setTotalBetAmount] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
@@ -12,15 +13,12 @@ const BetAmount = ({ state, dispatch }) => {
 
   const confirmBet = () => {
     let newBalance = state.playerBalance - totalBetAmount;
+    //check to make sure user has enough balance.
     if (newBalance < 0) {
-      //check to make sure user has enough balance.
       setErrorMsg("NOT ENOUGH FUNDS, REDO BE AMOUNT");
       setTotalBetAmount(0);
     } else {
-      dispatch({
-        type: "SET_BET_AMOUNT",
-        payload: totalBetAmount,
-      });
+      dispatch({ type: "SET_BET_AMOUNT", payload: totalBetAmount });
       dispatch({ type: "SET_ROUND_STARTED", payload: true });
       dispatch({ type: "BET_PHASE", payload: false });
     }
@@ -28,31 +26,33 @@ const BetAmount = ({ state, dispatch }) => {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <p style={{ padding: "0 10px" }}>Total Bet Amount: ${totalBetAmount}</p>
-        <p>Player Balance: ${state.playerBalance}</p>
+      <div className="bet-display">
+        <p className="text1" style={{ padding: "0 10px" }}>Total Bet Amount: ${totalBetAmount}</p>
+        <p className="text1">Player Balance: ${state.playerBalance}</p>
       </div>
-      {state.playerBalance < 501 ? (
-        <div>
-          <button onClick={() => selectBetAmount(1)}>$1</button>
-          <button onClick={() => selectBetAmount(5)}>$5</button>
-          <button onClick={() => selectBetAmount(20)}>$20</button>
-          <button onClick={() => selectBetAmount(50)}>$50</button>
-          <button onClick={() => selectBetAmount(100)}>$100</button>
-          <button onClick={() => confirmBet()}>Deal</button>
-        </div>
-      ) : null}
 
-      {state.playerBalance > 501 ? (
-        <div>
-          <button onClick={() => selectBetAmount(20)}>$20</button>
-          <button onClick={() => selectBetAmount(50)}>$50</button>
-          <button onClick={() => selectBetAmount(100)}>$100</button>
-          <button onClick={() => selectBetAmount(250)}>$250</button>
-          <button onClick={() => selectBetAmount(500)}>$500</button>
-          <button onClick={() => confirmBet()}>Deal</button>
-        </div>
-      ) : null}
+      <div>
+        <Button variant="dark" onClick={() => selectBetAmount(1)}>
+          $1
+        </Button>
+        <Button variant="dark" onClick={() => selectBetAmount(10)}>
+          $10
+        </Button>
+        <Button variant="dark" onClick={() => selectBetAmount(100)}>
+          $100
+        </Button>
+        <Button variant="dark" onClick={() => selectBetAmount(500)}>
+          $500
+        </Button>
+        {state.playerBalance >= 5000 ? (
+          <Button variant="dark" onClick={() => selectBetAmount(5000)}>
+            $5000
+          </Button>
+        ) : null}
+        <Button variant="dark" onClick={() => confirmBet()}>
+          Deal
+        </Button>
+      </div>
 
       {errorMsg && <p>{errorMsg}</p>}
     </div>

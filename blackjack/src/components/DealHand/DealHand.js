@@ -32,18 +32,18 @@ const dealHand = async (state, dispatch) => {
     // Dispatch player's first card
     dispatch({ type: "ADD_PLAYER_CARD", payload: playerCard1Data.cards[0] });
     // Delay for 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 700));
     // Dispatch dealer's second card
     dispatch({ type: "ADD_DEALER_CARD", payload: dealerCard1Data.cards[0] });
 
     // Delay for 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 700));
 
     // Dispatch player's second card
     dispatch({ type: "ADD_PLAYER_CARD", payload: playerCard2Data.cards[0] });
 
     // Delay for 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 700));
 
     dispatch({ type: "ADD_DEALER_CARD", payload: state.hiddenCard });
     // Dispatch dealer's hidden card

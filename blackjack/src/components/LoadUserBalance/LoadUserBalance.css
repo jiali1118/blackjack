@@ -13,14 +13,14 @@
     border-radius: 20px;
 }
 
-.modall {
-    background-color: rgba(255, 255, 255, 0) !important;
+.modall2 {
+    background: linear-gradient(to bottom, black, #333333, #666666);
     /* 0.5 represents 50% transparency */
     padding: 20px;
-    border-radius: 5px;
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
-    /* add shadow for depth */
+    border-radius: 10px;
+    border: 2px solid white;
     z-index: 10;
+    height: 350px;
     display: block !important;
 }
 
@@ -29,6 +29,18 @@
     text-shadow: 2px 2px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 72px;
+}
+
+.dollar {
+    color: white;
+    text-shadow: 4px 4px 0 black, -4px -4px 0 black, 4px -4px 0 black, -4px 4px 0 black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 96px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 /* Additional styling as needed */

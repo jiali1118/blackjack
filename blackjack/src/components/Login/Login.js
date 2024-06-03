@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import Header from "../Header/header";
 
-function Login() {
+function Login({ setUser, setIsLoggedIn }) {
   const [inputEmail, setInputEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,6 +37,8 @@ function Login() {
       if (userData.token) {
         console.log("User Data info:", userData);
         document.cookie = `access_token=${userData.token}; path=/;`;
+        setUser(userData);
+        setIsLoggedIn(true);
         navigate("/");
       } else {
         setErrorMessage("Invalid email or password. Please try again");
@@ -47,13 +49,8 @@ function Login() {
     }
   };
 
-  // if(isLoggedIn) {
-  //   return <Redirect to="/"/>
-  // }
-
   return (
     <div>
-      <Header/>
       <div className="loginpage">
         <form onSubmit={handleSubmit}>
           <h1> Login </h1>

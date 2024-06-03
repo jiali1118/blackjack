@@ -1,0 +1,10 @@
+.bet-display {
+    display: flex;
+    justify-content: center;
+}
+
+.text1 {
+    color: white;
+    text-shadow: 2px 2px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
