@@ -48,9 +48,6 @@ function Login({ setUser, setIsLoggedIn }) {
       setErrorMessage("Failed to login. Try to register");
     }
   };
-  // if(isLoggedIn) {
-  //   return <Redirect to="/"/>
-  // }
 
   return (
     <div>
