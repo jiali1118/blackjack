@@ -1,9 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import "./login.css";
 import Header from "../Header/header";
-
 
 function Login({ setUser, setIsLoggedIn }) {
   const [inputEmail, setInputEmail] = useState("");
