@@ -1,5 +1,5 @@
 import express from "express";
-import mysql from "mysql2/promise"; // Import mysql2/promise for async/await support
+import mysql from "mysql2/promise";
 import bodyParser from "body-parser";
 import cors from "cors";
 import bcrypt from "bcrypt";
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
   })
 );
@@ -114,9 +114,6 @@ app.post("/login", async (req, res) => {
           { id: user.id, email: user.email },
           process.env.JWTKEY
         );
-        console.log("User ID:", user.id);
-        console.log("EMAIL:", user.email);
-        console.log("Generated token:", token);
         const { id, email, player_balance, highest_balance } = user;
         res.cookie("access_token", token, {
           maxAge: 60 * 60 * 24,
@@ -147,8 +144,6 @@ app.post("/playerbalance", async (req, res) => {
   const newPlayerBalance = req.body.newPlayerBalance;
 
   try {
-    console.log("Email:", email);
-    console.log("New Player Balance:", newPlayerBalance);
     // Check if the user exists
     const [rows] = await db.query(
       "SELECT * FROM blackjack.users WHERE email = ?",
