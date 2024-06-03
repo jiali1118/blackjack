@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"
+import "./Login.css";
+import Header from "../Header/header";
 
-function Login() {
+function Login({ setUser, setIsLoggedIn }) {
   const [inputEmail, setInputEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,11 +31,14 @@ function Login() {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Failed to login. Please try again.");
       }
       const userData = await response.json();
-      if(userData.token) {
-        document.cookie = `access_token=${userData.token}; path=/`;
+      if (userData.token) {
+        console.log("User Data info:", userData);
+        document.cookie = `access_token=${userData.token}; path=/;`;
+        setUser(userData);
+        setIsLoggedIn(true);
         navigate("/");
       } else {
         setErrorMessage("Invalid email or password. Please try again");
@@ -45,32 +49,34 @@ function Login() {
     }
   };
 
-  // if(isLoggedIn) {
-  //   return <Redirect to="/"/>
-  // }
-
   return (
-    <div className ="loginpage">
-      <form onSubmit={handleSubmit}>
-        <h1> Login </h1>
-        <div className="input-container">
-          <label className ="text">Email</label>
-          <input type="text" value={inputEmail} onChange={handleEmailChange} />
-        </div>
-        <div className="input-container">
-          <label className ="text">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        <button type="submit">Login</button>
-          <p>
-            Don't have an account? <a href="/Register">Register</a>
-          </p>
-        </div>
-      </form>
-      {errorMessage && <p>{errorMessage}</p>}
+    <div>
+      <div className="loginpage">
+        <form onSubmit={handleSubmit}>
+          <h1> Login </h1>
+          <div className="input-container">
+            <label className="text">Email</label>
+            <input
+              type="text"
+              value={inputEmail}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <div className="input-container">
+            <label className="text">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <button type="submit">Login</button>
+            <p>
+              Don't have an account? <a href="/Register">Register</a>
+            </p>
+          </div>
+        </form>
+        {errorMessage && <p>{errorMessage}</p>}
+      </div>
     </div>
   );
 }

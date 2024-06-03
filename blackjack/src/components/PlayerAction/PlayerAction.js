@@ -1,42 +1,63 @@
-import React from "react";
-import Hit from "../Hit/Hit";
-function playerAction(props) {
+import React, { useState } from "react";
+import hit from "../../utilities/hit";
+import double from "../../utilities/double";
+import split from "../../utilities/split";
+import { Button } from "react-bootstrap";
+
+function PlayerAction({ state, dispatch, index }) {
+  const canIDouble = state.playerBalance - state.betAmount * 2 >= 0;
+  const [hitClicked, setHitClicked] = useState(false);
   return (
     <div>
-      <button
+      {/*Action for hit*/}
+      <Button
+        variant="dark"
         onClick={() => {
-          console.log(props.deckId);
-          Hit(props.deckId, props.setPlayerHand);
+          hit(state, dispatch, index);
+          setHitClicked(true);
         }}
       >
         Hit
-      </button>
-      <button
-        onClick={() => {
-          console.log("CLICKED!");
-        }}
-      >
-        Double
-      </button>
-      <button
-        onClick={() => {
-          console.log("CLICKED!");
-        }}
-      >
-        Stand
-      </button>
-      {/* {playerHand.hand.length >= 2 &&
-      playerHand.hand[0].value === playerHand.hand[1].value ? (
-        <button
+      </Button>
+
+      {/*Action for Doubling*/}
+      {!hitClicked && canIDouble ? (
+        <Button
+          variant="dark"
           onClick={() => {
-            console.log("CLICKED!");
+            double(state, dispatch); //sets playerturn to false immediately
+          }}
+        >
+          Double
+        </Button>
+      ) : null}
+
+      {/*Action for Splitting hand*/}
+      {state.playerHands.length >= 2 &&
+      state.playerHands[0].value === state.playerHands[1].value &&
+      canIDouble ? (
+        <Button
+          variant="dark"
+          onClick={() => {
+            split(state, dispatch);
           }}
         >
           Split
-        </button>
-      ) : null} */}
+        </Button>
+      ) : null}
+
+      {/*Action for Standing*/}
+      <Button
+        variant="dark"
+        onClick={() => {
+          dispatch({ type: "SET_PLAYER_TURN", payload: false });
+          dispatch({ type: "SET_DEALER_TURN", payload: true });
+        }}
+      >
+        Stand
+      </Button>
     </div>
   );
 }
 
-export default playerAction;
+export default PlayerAction;
