@@ -86,7 +86,6 @@ app.get("/users", async (req, res) => {
       email: user.email,
       password: user.password,
     }));
-    console.log("users data:", userData);
     res.json(userData);
   } catch (error) {
     console.error("trouble getting users:", error);
@@ -203,7 +202,6 @@ app.post("/register", async (req, res) => {
     res
       .status(200)
       .json({ message: "user created successfully", userId: result.insertId });
-    console.log(result);
   } catch (error) {
     console.error("Trouble registering", error);
     res.status(500).json({ error: "failed to register user" });
