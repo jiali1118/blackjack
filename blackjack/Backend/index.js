@@ -66,7 +66,6 @@ app.get("/leaderboard", async (req, res) => {
       email: user.email,
       highest_balance: user.highest_balance,
     }));
-    console.log("users highest scores data:", userData);
     res.json(userData);
   } catch (error) {
     console.error("Couldn't get high scores", error);
