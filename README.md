@@ -3,6 +3,7 @@
 A Blackjack game built using React, JavaScript, HTML, CSS, Express, and MySQL.
 
 ## Overview
+
 ![image](https://github.com/jiali1118/blackjack/assets/107276305/f907f4f0-6c74-490d-907e-22d75a43bc44)
 
 This is a Blackjack game written in React.js, using API calls from the Deck of Cards API to render basic cards based on game action.
@@ -19,18 +20,24 @@ This is a Blackjack game written in React.js, using API calls from the Deck of C
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/jiali1118/blackjack.git
+
+   ```
 
 2. Navigate to project directory:
    ```bash
    cd blackjack
+   ```
 3. Install required libraries:
-    ```bash
+   ```bash
    npm install
+   ```
 4. Start Application:
-    ```bash
-    npm start
+   ```bash
+   npm start
+   ```
 
 ## Setting Up Server/Database (Not Required to Play Game)
 
@@ -38,6 +45,7 @@ This is a Blackjack game written in React.js, using API calls from the Deck of C
 
 1. Create a schema named `blackjack`.
 2. Create a table named `users` using the following command:
+
    ```sql
    CREATE TABLE users (
      id int NOT NULL AUTO_INCREMENT,
@@ -49,17 +57,23 @@ This is a Blackjack game written in React.js, using API calls from the Deck of C
      UNIQUE KEY email (email)
    ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+   ```
 
 3. Cd blackjack/Backend
+
 - Change .env file “PASSWORD” to your corresponding password on mysqlworkbench
 
 4. Install required libraries:
-    ```bash
+   ```bash
    npm install
+   ```
 
 5.Check if localhost:8800 is connected
+
 - Enabling register and login
+- Enable storage of user data
 
 ## Collaborator:
+
 - Jia Liang Li
 - Richard Kwong
