@@ -64,11 +64,16 @@ This is a Blackjack game written in React.js, using API calls from the Deck of C
 - Change .env file “PASSWORD” to your corresponding password on mysqlworkbench
 
 4. Install required libraries:
+
    ```bash
    npm install
    ```
 
-5.Check if localhost:8800 is connected
+5. Start Backend
+   ```bash
+   node index.js
+   ```
+6. Check if localhost:8800 is connected
 
 - Enabling register and login
 - Enable storage of user data
